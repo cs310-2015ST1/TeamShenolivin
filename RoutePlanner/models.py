@@ -4,6 +4,7 @@ import urllib
 
 # Create your models here.
 
+# class for kml file retrieving and parsing
 class KMLParser:
     url = "http://data.vancouver.ca/download/kml/bikeways.kmz"
 
