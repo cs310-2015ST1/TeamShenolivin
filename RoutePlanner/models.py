@@ -8,10 +8,15 @@ class KMLParser:
     url = "http://data.vancouver.ca/download/kml/bikeways.kmz"
 
     def __init__(self):
+        # retrieve the kmz file from data vancouver url
         kmzData = urllib.urlretrieve(url, "data.kmz")
+        # unzip the file
         kmz = ZipFile(kmzData[0], 'r')
+        # open the kml file in the archive
         kml = kmz.open('bikeways.kml', 'r')
+        # get real data in kml file
         self.content = parser.parse(kml).getroot()
+        # all placemarks in kml file
         self.placemarks = self.content.Document.Folder.Placemark
 
     # note that the objects parsed by the parser
@@ -40,7 +45,7 @@ class KMLParser:
     # returning type string, no need to use '.text'
     # method to convert
     def get_bikelane_type_as_string(description):
-        return description.text.split('<')[0]
+        return description.text.split('<')[0].strip()
 
     def get_name_string_by_placemark_index(index):
         return placemarks[index].name.text
