@@ -1,7 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 from pykml import parser
+from zipfile import ZipFile
 import urllib
+import datetime
+import time
 
 # Create your models here.
 
@@ -11,7 +14,7 @@ class KMLParser:
 
     def __init__(self):
         # retrieve the kmz file from data vancouver url
-        kmzData = urllib.urlretrieve(url, "data.kmz")
+        kmzData = urllib.urlretrieve(self.url, "data.kmz")
         # unzip the file
         kmz = ZipFile(kmzData[0], 'r')
         # open the kml file in the archive
@@ -28,35 +31,35 @@ class KMLParser:
     def get_all_placemarks(self):
         return self.placemarks
 
-    def get_placemark_by_index(index):
-        return placemarks[index]
+    def get_placemark_by_index(self, index):
+        return self.placemarks[index]
 
     def get_all_line_strings(self):
         returnVal = []
-        for placemark in placemarks:
-            returnVal.extend(placemarks.MultiGeometry.LineString)
+        for placemark in self.placemarks:
+            returnVal.extend(self.placemarks.MultiGeometry.LineString)
         return returnVal
 
-    def get_line_strings_by_placemark_index(index):
-        return placemarks[index].MultiGeometry.LineString
+    def get_line_strings_by_placemark_index(self, index):
+        return self.placemarks[index].MultiGeometry.LineString
 
-    def get_description_by_placemark_index(index):
-        return placemarks[index].description
+    def get_description_by_placemark_index(self, index):
+        return self.placemarks[index].description
 
     # all methods containing 'string' are already
     # returning type string, no need to use '.text'
     # method to convert
-    def get_bikelane_type_as_string(description):
+    def get_bikelane_type_as_string(self, description):
         return description.text.split('<')[0].strip()
 
-    def get_name_string_by_placemark_index(index):
-        return placemarks[index].name.text
+    def get_name_string_by_placemark_index(self, index):
+        return self.placemarks[index].name.text
 
     # returns a list of coordinate strings.
     # @param pmindex: index of placemark
     # @param lsindex: index of LineString inside the placemark
-    def get_coordinates_by_indices(pmindex, lsindex):
-        coordinates_string = placemarks[pmindex].MultiGeometry.LineString[lsindex].coordinates.text
+    def get_coordinates_by_indices(self, pmindex, lsindex):
+        coordinates_string = self.placemarks[pmindex].MultiGeometry.LineString[lsindex].coordinates.text
         coordinates_list = coordinates_string.split(' ')
         # remove pure white space string (the last one)
         for coordinate in coordinates_list:
@@ -73,3 +76,68 @@ class UserProfile(models.Model):
     
     def __unicode__(self):
         return self.user.username
+
+
+
+class Route:
+    def __init__(self):
+        self.points = []
+
+    def add_point(self, point):
+        self.points.append(point)
+
+    def remove_point(self, point):
+        self.points.remove(point)
+
+    def find_point(self, point):
+        return self.points.__contains__(point)
+
+    def get_points(self):
+        return self.points
+
+
+class RouteManager:
+    def __init__(self):
+        self.routes = []
+        self.date = datetime.datetime.now()
+        self.parser = KMLParser()
+        self.timer = UpdateTimer(self)
+
+    def add_route(self, route):
+        self.routes.append(route)
+
+    def remove_route(self, route):
+        self.routes.remove(route)
+
+    def clear_routes(self):
+        self.routes = []
+
+    def find_route(self, route):
+        return self.routes.__contains__(route)
+
+    def update_data(self):
+        self.clear_routes()
+        data = self.parser.parse_data()
+        for route in data:
+            self.add_route(route)
+        self.date = datetime.datetime.now()
+
+    def get_points(self):
+        for route in self.routes:
+            route.getPoints()
+
+
+class UpdateTimer:
+    def __init__(self, manager):
+        self.manager = manager
+        self.time = time.time()
+        manager.update_data()
+
+    def spinning(self):
+        while True:
+            if time.time() - self.time > 10000000:
+                self.on_time_out()
+
+    def on_time_out(self):
+        raise Exception()
+
