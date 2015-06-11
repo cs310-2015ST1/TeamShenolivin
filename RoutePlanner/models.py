@@ -36,7 +36,7 @@ class KMLParser:
     def get_all_line_strings(self):
         returnVal = []
         for placemark in self.placemarks:
-            returnVal.extend(self.placemarks.MultiGeometry.LineString)
+            returnVal.extend(placemark.MultiGeometry.LineString)
         return returnVal
 
     def get_line_strings_by_placemark_index(self, index):
@@ -59,67 +59,85 @@ class KMLParser:
     # @param lsindex: index of LineString inside the placemark
     def get_coordinates_by_indices(self, pmindex, lsindex):
         coordinates_string = self.placemarks[pmindex].MultiGeometry.LineString[lsindex].coordinates.text
-        coordinates_list = coordinates_string.split(' ')
+        coordinates_list = coordinates_string.split(',0 ')
         # remove pure white space string (the last one)
-        for coordinate in coordinates_list:
-            if len(coordinate) < 5:
-                coordinates_list.remove(coordinate)
+        # for coordinate in coordinates_list:
+        #     if len(coordinate) < 5:
+        #         coordinates_list.remove(coordinate)
         return coordinates_list
 
 
-class Route:
+class BikeWay:
+    def __init__(self, name, description, coordinates):
+        self.name = name
+        self.description = description
+        self.coordinates = coordinates
+
+    # def add_point(self, point):
+    #     self.points.append(point)
+    #
+    # def remove_point(self, point):
+    #     self.points.remove(point)
+    #
+    # def find_point(self, point):
+    #     return self.points.__contains__(point)
+    #
+    # def get_points(self):
+    #     return self.points
+
+
+class BikeWayManager:
     def __init__(self):
-        self.points = []
-
-    def add_point(self, point):
-        self.points.append(point)
-
-    def remove_point(self, point):
-        self.points.remove(point)
-
-    def find_point(self, point):
-        return self.points.__contains__(point)
-
-    def get_points(self):
-        return self.points
-
-
-class RouteManager:
-    def __init__(self):
-        self.routes = []
+        self.bikeways = []
         self.date = datetime.datetime.now()
         self.parser = KMLParser()
         self.timer = UpdateTimer(self)
 
-    def add_route(self, route):
-        self.routes.append(route)
+    def parse_data(self):
+        placemarks = self.parser.get_all_placemarks()
+        name = ''
+        description = ''
+        coordinates = []
+        for i in range(0, len(placemarks) - 1):
+            name = self.parser.get_name_string_by_placemark_index(i)
+            description = self.parser.get_description_by_placemark_index(i)
+            linestrings = self.parser.get_line_strings_by_placemark_index(i)
 
-    def remove_route(self, route):
-        self.routes.remove(route)
+            for j in range (0, len(linestrings) - 1):
+                coordinates.append(self.parser.get_coordinates_by_indices(i, j))
 
-    def clear_routes(self):
-        self.routes = []
+        self.bikeways.append(BikeWay(name, description, coordinates))
 
-    def find_route(self, route):
-        return self.routes.__contains__(route)
 
-    def update_data(self):
-        self.clear_routes()
-        data = self.parser.parse_data()
-        for route in data:
-            self.add_route(route)
-        self.date = datetime.datetime.now()
-
-    def get_points(self):
-        for route in self.routes:
-            route.getPoints()
+    # def add_route(self, route):
+    #     self.routes.append(route)
+    #
+    # def remove_route(self, route):
+    #     self.routes.remove(route)
+    #
+    # def clear_routes(self):
+    #     self.routes = []
+    #
+    # def find_route(self, route):
+    #     return self.routes.__contains__(route)
+    #
+    # def update_data(self):
+    #     self.clear_routes()
+    #     data = self.parser.parse_data()
+    #     for route in data:
+    #         self.add_route(route)
+    #     self.date = datetime.datetime.now()
+    #
+    # def get_points(self):
+    #     for route in self.routes:
+    #         route.getPoints()
 
 
 class UpdateTimer:
     def __init__(self, manager):
         self.manager = manager
         self.time = time.time()
-        manager.update_data()
+        manager.parse_data()
 
     def spinning(self):
         while True:
