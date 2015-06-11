@@ -3,10 +3,77 @@
 
     <head>
         <title>Route Planner</title>
-        <link rel="stylesheet" type="text/css" href="../templates/RoutePlanner/htmlStyle.css" />
+        <script src="http://maps.googleapis.com/maps/api/js"></script>
+        <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans" />
+        <style>
+            body {
+                font-family: 'Open Sans';
+                text-size: 18px;
+                margin-top: 50px;
+            }
+
+            h1 {
+                font-family: 'Open Sans';
+                text-align: center;
+            }
+
+            #navBar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                background: #191970;
+                width: 100%;
+                padding: 0;
+            }
+
+            #navBar ul {
+                list-style: none;
+                margin-top: 0;
+                padding: 0;
+                z-index: 2;
+            }
+
+            #navBar li {
+                display: inline-block;
+                width: 10%;
+                color: #ffffff;
+                float: left;
+                text-align: center;
+                padding-top: 10px;
+                padding-bottom: 10px;
+            }
+
+            #navBar li:hover {
+                background: #00ffff;
+                transition: 1s;
+            }
+
+            #googleMap {
+                width: 70%;
+                height: 800px;
+                margin-left: 15%;
+                margin-right: 15%;
+                position: static;
+            }
+
+            a {
+                color: #ffffff;
+                outline: 0;
+                text-decoration: none;
+            }
+        </style>
     </head>
 
     <body>
+	    <nav>
+	        <div id='navBar'>
+	            <ul>
+	                <li> <a href="/RoutePlanner/register"> Get Started </a> </li>
+	                <li> <a href="login.html"> Log in </a> </li>
+	                <li> <a href="questions.html"> FAQ </a> </li>
+	            </ul>
+	        </div>
+	    </nav>
         <div id='title'>
             <h1> Create an account </h1>
             
@@ -30,5 +97,7 @@
 	        {% endif %}
         </div>
     </body>
+    
+    
 
 </html>
