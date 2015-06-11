@@ -3,12 +3,84 @@
 
     <head>
         <title>Route Planner</title>
-        <link rel="stylesheet" type="text/css" href="../templates/RoutePlanner/htmlStyle.css" />
+        <script src="http://maps.googleapis.com/maps/api/js"></script>
+        <script>
+            function initialize() {
+              var mapProp = {
+                center:new google.maps.LatLng(51.508742,-0.120850),
+                zoom:5,
+                mapTypeId:google.maps.MapTypeId.ROADMAP
+              };
+              var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+            }
+            google.maps.event.addDomListener(window, 'load', initialize);
+        </script>
+        <style>
+            body {
+                font-family: 'Big Caslon', 'Book Antiqua', 'Palatino Linotype', Georgia, serif;
+                text-size: 18px;
+                margin-top: 50px;
+            }
+
+            h1 {
+                font-family: 'Big Caslon', 'Book Antiqua', 'Palatino Linotype', Georgia, serif;
+                text-align: center;
+            }
+
+            #navBar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                background: #191970;
+                width: 100%;
+                padding: 0;
+            }
+
+            #navBar ul {
+                list-style: none;
+                margin-top: 0;
+                padding: 0;
+            }
+
+            #navBar li {
+                display: inline-block;
+                width: 10%;
+                color: #ffffff;
+                float: left;
+                text-align: center;
+                padding-top: 10px;
+                padding-bottom: 10px;
+            }
+
+            #navBar li:hover {
+                background: #00ffff;
+                transition: 1s;
+            }
+
+            #googleMap {
+                width: 70%;
+                height: 400px;
+                margin-left: 15%;
+                margin-right: 15%;
+            }
+        </style>
+        <!--<link rel="stylesheet" type="text/css" href="C:/Users/Minghao/workspace/TeamShenolivin/templates/RoutePlanner/htmlStyle.css" />-->
     </head>
 
     <body>
+    <nav>
+        <div id='navBar'>
+            <ul>
+                <li> Get Started </li>
+                <li> Log in </li>
+                <li> FAQ </li>
+            </ul>
+        </div>
+    </nav>
         <div id='title'>
             <h1> Route Planner </h1>
+        </div>
+        <div id="googleMap">
         </div>
     </body>
 
