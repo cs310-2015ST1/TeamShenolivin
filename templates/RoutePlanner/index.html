@@ -4,6 +4,7 @@
     <head>
         <title>Route Planner</title>
         <script src="http://maps.googleapis.com/maps/api/js"></script>
+        <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans" />
         <script>
             function initialize() {
               var mapProp = {
@@ -17,13 +18,13 @@
         </script>
         <style>
             body {
-                font-family: 'Big Caslon', 'Book Antiqua', 'Palatino Linotype', Georgia, serif;
+                font-family: 'Open Sans';
                 text-size: 18px;
                 margin-top: 50px;
             }
 
             h1 {
-                font-family: 'Big Caslon', 'Book Antiqua', 'Palatino Linotype', Georgia, serif;
+                font-family: 'Open Sans';
                 text-align: center;
             }
 
@@ -40,6 +41,7 @@
                 list-style: none;
                 margin-top: 0;
                 padding: 0;
+                z-index: 2;
             }
 
             #navBar li {
@@ -59,9 +61,16 @@
 
             #googleMap {
                 width: 70%;
-                height: 400px;
+                height: 800px;
                 margin-left: 15%;
                 margin-right: 15%;
+                position: static;
+            }
+
+            a {
+                color: #ffffff;
+                outline: 0;
+                text-decoration: none;
             }
         </style>
         <!--<link rel="stylesheet" type="text/css" href="C:/Users/Minghao/workspace/TeamShenolivin/templates/RoutePlanner/htmlStyle.css" />-->
@@ -71,9 +80,9 @@
     <nav>
         <div id='navBar'>
             <ul>
-                <li> Get Started </li>
-                <li> Log in </li>
-                <li> FAQ </li>
+                <li> <a href="signup.html"> Get Started </a> </li>
+                <li> <a href="login.html"> Log in </a> </li>
+                <li> <a href="questions.html"> FAQ </a> </li>
             </ul>
         </div>
     </nav>
