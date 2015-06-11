@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 from pykml import parser
 from zipfile import ZipFile
 import urllib
@@ -65,6 +66,17 @@ class KMLParser:
         #     if len(coordinate) < 5:
         #         coordinates_list.remove(coordinate)
         return coordinates_list
+    
+# contains all user data
+class UserProfile(models.Model):
+    user = models.OneToOneField(User)
+    
+    website = models.URLField(blank=True)
+    searchLocations = [];
+    
+    def __unicode__(self):
+        return self.user.username
+
 
 
 class BikeWay:
@@ -146,3 +158,4 @@ class UpdateTimer:
 
     def on_time_out(self):
         raise Exception()
+

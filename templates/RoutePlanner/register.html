@@ -5,17 +5,6 @@
         <title>Route Planner</title>
         <script src="http://maps.googleapis.com/maps/api/js"></script>
         <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans" />
-        <script>
-            function initialize() {
-              var mapProp = {
-                center:new google.maps.LatLng(49.2827,-123.1207),
-                zoom:12,
-                mapTypeId:google.maps.MapTypeId.ROADMAP
-              };
-              var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
-            }
-            google.maps.event.addDomListener(window, 'load', initialize);
-        </script>
         <style>
             body {
                 font-family: 'Open Sans';
@@ -73,28 +62,42 @@
                 text-decoration: none;
             }
         </style>
-        <!--<link rel="stylesheet" type="text/css" href="C:/Users/Minghao/workspace/TeamShenolivin/templates/RoutePlanner/htmlStyle.css" />-->
     </head>
 
     <body>
-    <nav>
-        <div id='navBar'>
-            <ul>
-                <li> <a href="/RoutePlanner/register"> Get Started </a> </li>
-                <li> <a href="login.html"> Log in </a> </li>
-                <li> <a href="questions.html"> FAQ </a> </li>
-            </ul>
-        </div>
-    </nav>
+	    <nav>
+	        <div id='navBar'>
+	            <ul>
+	                <li> <a href="/RoutePlanner/register"> Get Started </a> </li>
+	                <li> <a href="login.html"> Log in </a> </li>
+	                <li> <a href="questions.html"> FAQ </a> </li>
+	            </ul>
+	        </div>
+	    </nav>
         <div id='title'>
-            <h1> Route Planner </h1>
+            <h1> Create an account </h1>
             
-<!--             <a href="/RoutePlanner/register">Register</a> -->
+            {% if registered %}
+            	Thank you for creating an account!
+            	<a href="/RoutePlanner/">Return to the homepage</a>
             
+            {% else %}
             
-        </div>
-        <div id="googleMap">
+            <form id="user_form" method="post" action="/RoutePlanner/register/"
+                enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+            {{ user_form.as_p }}
+            {{ profile_form.as_p }}
+
+            <!-- Provide a button to click to submit the form. -->
+            <input type="submit" name="submit" value="Register" />
+	        </form>
+	        {% endif %}
         </div>
     </body>
+    
+    
 
 </html>
