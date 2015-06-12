@@ -66,24 +66,29 @@ class KMLParser:
         #     if len(coordinate) < 5:
         #         coordinates_list.remove(coordinate)
         return coordinates_list
-    
+
+
 # contains all user data
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     
     website = models.URLField(blank=True)
-    searchLocations = [];
+    searchLocations = []
     
     def __unicode__(self):
         return self.user.username
 
 
+# stores all the bikeways in the database
+class BikeWay(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.CharField(max_length=100)
+    coordinates = models.TextField()
 
-class BikeWay:
-    def __init__(self, name, description, coordinates):
-        self.name = name
-        self.description = description
-        self.coordinates = coordinates
+    # def __init__(self, name, description, coordinates):
+    #     self.name = name
+    #     self.description = description
+    #     self.coordinates = coordinates
 
     # def add_point(self, point):
     #     self.points.append(point)
@@ -98,6 +103,7 @@ class BikeWay:
     #     return self.points
 
 
+# manages when the bikeway data is parsed
 class BikeWayManager:
     def __init__(self):
         self.bikeways = []
@@ -107,18 +113,17 @@ class BikeWayManager:
 
     def parse_data(self):
         placemarks = self.parser.get_all_placemarks()
-        name = ''
-        description = ''
-        coordinates = []
+        coordinates = ""
         for i in range(0, len(placemarks) - 1):
             name = self.parser.get_name_string_by_placemark_index(i)
             description = self.parser.get_description_by_placemark_index(i)
             linestrings = self.parser.get_line_strings_by_placemark_index(i)
 
             for j in range (0, len(linestrings) - 1):
-                coordinates.append(self.parser.get_coordinates_by_indices(i, j))
+                coordinates += self.parser.get_coordinates_by_indices(i, j)
 
-        self.bikeways.append(BikeWay(name, description, coordinates))
+            bikeway = BikeWay.objects.get_or_create(name = name, description = description, coordinates = coordinates)
+            self.bikeways.append(bikeway)
 
 
     # def add_route(self, route):
@@ -146,6 +151,7 @@ class BikeWayManager:
 
 
 class UpdateTimer:
+    # 10 second threshold?
     def __init__(self, manager):
         self.manager = manager
         self.time = time.time()
@@ -158,4 +164,3 @@ class UpdateTimer:
 
     def on_time_out(self):
         raise Exception()
-
