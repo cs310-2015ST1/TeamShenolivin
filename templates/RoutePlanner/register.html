@@ -68,6 +68,7 @@
 	    <nav>
 	        <div id='navBar'>
 	            <ul>
+	            	<li> <a href="/RoutePlanner/"> Home </a> </li>
 	                <li> <a href="/RoutePlanner/register"> Get Started </a> </li>
 	                <li> <a href="login.html"> Log in </a> </li>
 	                <li> <a href="questions.html"> FAQ </a> </li>
@@ -78,10 +79,13 @@
             <h1> Create an account </h1>
             
             {% if registered %}
-            	Thank you for creating an account!
-            	<a href="/RoutePlanner/">Return to the homepage</a>
+            <div align="center">
+            	Thank you for creating an account! <br/>
+            	<a href="/RoutePlanner/"> <font color = "blue">Return to RoutePlanner</font></a><br/>
+            </div>
             
             {% else %}
+            <div align="center">
             
             <form id="user_form" method="post" action="/RoutePlanner/register/"
                 enctype="multipart/form-data">
@@ -94,6 +98,7 @@
             <!-- Provide a button to click to submit the form. -->
             <input type="submit" name="submit" value="Register" />
 	        </form>
+	        </div>
 	        {% endif %}
         </div>
     </body>
