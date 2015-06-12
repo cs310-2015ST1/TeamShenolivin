@@ -5,11 +5,14 @@
     <head>
         <title>Route Planner</title>
         <script src="http://maps.googleapis.com/maps/api/js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans" />
-        <script>
+        <script type="text/javascript">
             var loggedIn = false;
+            var times = 0;
             function hideAccountPage() {
-                getElementById("accountLi").style.visibility = "hidden";
+                document.getElementById("accountLi").style.visibility = "hidden";
+                document.getElementById('additionalLi').style.visibility = 'hidden';
             }
             function initialize() {
               var mapProp = {
@@ -22,6 +25,19 @@
                 hideAccountPage();
             }
             google.maps.event.addDomListener(window, 'load', initialize);
+
+            $(document).ready(function() {
+                var sub = $('.submitBtn');
+                sub.click(function() {
+                    // alert("Okay this should be fine if you see this.");
+                    document.getElementById('accountLi').style.visibility = 'visible';
+                    if (times >= 1)
+                        document.getElementById('additionalLi').style.visibility = 'visible';
+                    times ++;
+                });
+            });
+
+
         </script>
         <style>
             body {
@@ -56,12 +72,14 @@
 
             #navBar li {
                 display: inline-block;
-                width: 10%;
+                /*width: 10%;*/
                 color: #ffffff;
                 float: left;
                 text-align: center;
                 padding-top: 10px;
                 padding-bottom: 10px;
+                padding-right: 30px;
+                padding-left: 30px;
             }
 
             #navBar li:hover {
@@ -89,8 +107,14 @@
 
             input[type=submit], input[type=button],
             button {
-                font-size: 10px;
+                font-size: 16px;
                 font-family: 'Open Sans';
+                height: 30px;
+                width: 200px;
+                border-radius: 3px;
+                border: 2px solid #77ffff;
+                margin-top: 20px;
+                background: #eeffff;
             }
 
             input[type=text] {
@@ -98,9 +122,13 @@
                 font-family: 'Open Sans';
                 width: 200px;
                 height: 30px;
-                border: 2px;
+                border: 2px solid #cfffff;
                 border-radius: 3px;
             }
+
+       /*     #accountLi {
+                visibility: hidden;
+            }*/
         </style>
     </head>
 
@@ -112,6 +140,7 @@
                 <li> <a href="login.html"> Log in </a> </li>
                 <li> <a href="questions.html"> FAQ </a> </li>
                 <li id="accountLi"> <a href="accountpage.html"> My Account </a> </li>
+                <li id="additionalLi"> <a href="#"> Additional Functionality </a> </li>
             </ul>
         </div>
     </nav>
@@ -123,8 +152,8 @@
                 <p class="instructions"> Enter your starting point: </p>
                 <input type="text" placeholder="Location"> <br/>
                 <p class="instructions"> Enter your destination: </p>
-                <input type="text" placeholder="location">
-                <input type="submit" value="submit"> </input>
+                <input type="text" placeholder="location"> <br/>
+                <input class="submitBtn" type="button" value="submit"> </input>
             </form>
         </div>
         <div id="googleMap">
