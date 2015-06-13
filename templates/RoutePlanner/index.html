@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <!-- Please do not change. At least inform me before making changes. -->
+{% load staticfiles %}
 <html>
 
     <head>
@@ -7,6 +8,7 @@
         <script src="http://maps.googleapis.com/maps/api/js"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans" />
+        <link rel="stylesheet" type="text/css" href="{% static "css/htmlStyle.css" %}" />
         <script type="text/javascript">
             var loggedIn = false;
             var times = 0;
@@ -44,7 +46,7 @@
                 background: #e0ffff;
                 padding: 0;
                 font-family: 'Open Sans';
-                /*font-size: 18px;*/
+                font-size: 18px;
                 margin-top: 50px;
             }
 
@@ -110,19 +112,19 @@
                 font-size: 16px;
                 font-family: 'Open Sans';
                 height: 30px;
-                width: 200px;
+                width: 70%;
                 border-radius: 3px;
-                border: 2px solid #77ffff;
                 margin-top: 20px;
-                background: #eeffff;
+                border: 0px;
+                background: #00ff00;
             }
 
             input[type=text] {
                 font-size: 15px;
                 font-family: 'Open Sans';
-                width: 200px;
+                width: 70%;
                 height: 30px;
-                border: 2px solid #cfffff;
+                border: 1px solid black;
                 border-radius: 3px;
             }
 
@@ -136,16 +138,18 @@
     <nav>
         <div id='navBar'>
             <ul>
-            	<li> <a href="/RoutePlanner/"> Home </a> </li>
-                <li> <a href="/RoutePlanner/register.html"> Get Started </a> </li>
+            	<a href="/RoutePlanner/"> <li>Home </li></a> 
+            	<a href="/RoutePlanner/about.html"> <li> About </li></a>                     
                 {% if user.is_authenticated %}
-		        <li> <a href="/RoutePlanner/logout.html"> Log out </a> </li>
+		        <a href="/RoutePlanner/logout.html"> <li>Log Out</li></a> 
+		        <a href="/RoutePlanner/account.html"> <li>My Account</li></a> 
 		        {% else %}
-		        <li> <a href="/RoutePlanner/login.html"> Log in </a> </li>
+		        <a href="/RoutePlanner/login.html"><li>Log In</li></a> 
+		        <a href="/RoutePlanner/register.html"><li>Get Started</li></a> 
 		        {% endif %}
-                <li> <a href="questions.html"> FAQ </a> </li>
-                <li id="accountLi"> <a href="accountpage.html"> My Account </a> </li>
-                <li id="additionalLi"> <a href="#"> Additional Functionality </a> </li>
+                
+<!--                 <li id="accountLi"> <a href="accountpage.html"> My Account </a> </li> -->
+<!--                 <li id="additionalLi"> <a href="#"> Additional Functionality </a> </li> -->
             </ul>
         </div>
     </nav>
@@ -153,6 +157,9 @@
             <h1> Route Planner </h1>          
         </div>
         <div id="infoInput">
+            {% if user.is_authenticated %}
+            Logged in as {{ user.username }}<br/>
+            {% endif %}
             <form>
                 <p class="instructions"> Enter your starting point: </p>
                 <input type="text" placeholder="Location"> <br/>
@@ -160,10 +167,9 @@
                 <input type="text" placeholder="location"> <br/>
                 <input class="submitBtn" type="button" value="submit"> </input>
             </form>
+            All Markers On Map:
             
-            {% if user.is_authenticated %}
-	        Logged in as {{ user.username }}<br/>
-	        {% endif %}
+            
         </div>
         <div id="googleMap">
         </div>
