@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
     <head>
         <title>MegaByke Route Planner</title>
         <script src="http://maps.googleapis.com/maps/api/js"></script>
@@ -91,16 +90,6 @@
                 border: 2px solid #cfffff;
                 border-radius: 3px;
             }
-            
-            input[type=email] {
-                font-size: 15px;
-                font-family: 'Open Sans';
-                width: 200px;
-                height: 30px;
-                border: 2px solid #cfffff;
-                border-radius: 3px;
-            }
-            
             input[type=password] {
                 font-size: 15px;
                 font-family: 'Open Sans';
@@ -131,34 +120,22 @@
 	            </ul>
 	        </div>
 	    </nav>
-        <div id='title'>
-            <h1> Create an account </h1>
-            
-            {% if registered %}
-            <div align="center">
-            	Thank you for creating an account! <br/>
-            	<a href="/RoutePlanner/"> <font color = "blue">Return to RoutePlanner</font></a><br/>
-            </div>
-            
-            {% else %}
-            <div align="center">
-            
-            <form id="user_form" method="post" action="/RoutePlanner/register.html"
-                enctype="multipart/form-data">
-
-            {% csrf_token %}
-
-            {{ user_form.as_p }}
-            {{ profile_form.as_p }}
-
-            <!-- Provide a button to click to submit the form. -->
-            <input type="submit" name="submit" value="Register" />
+	    <div id='title'>
+	        <h1>Login to MegaByke</h1>
+	        
+	        <div align="center">
+	
+	        <form id="login_form" method="post" action="/RoutePlanner/login.html">
+	            {% csrf_token %}
+	            Username: <input type="text" name="username" value="" size="50" />
+	            <br />
+	            Password: <input type="password" name="password" value="" size="50" />
+	            <br />
+	
+	            <input type="submit" value="submit" />
 	        </form>
 	        </div>
-	        {% endif %}
         </div>
-    </body>
-    
-    
 
+    </body>
 </html>
