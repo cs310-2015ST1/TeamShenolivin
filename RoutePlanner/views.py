@@ -130,3 +130,7 @@ def user_logout(request):
 
     # Take the user back to the homepage.
     return HttpResponseRedirect('/RoutePlanner/')
+
+def about(request):
+    
+    return render(request, 'RoutePlanner/about.html', {})
