@@ -5,6 +5,7 @@ from zipfile import ZipFile
 import urllib
 import datetime
 import time
+from threading import Thread
 
 # Create your models here.
 
@@ -82,8 +83,11 @@ class UserProfile(models.Model):
 # stores all the bikeways in the database
 class BikeWay(models.Model):
     name = models.CharField(max_length=100)
-    description = models.CharField(max_length=100)
+    description = models.TextField()
     coordinates = models.TextField()
+
+    def __unicode__(self):
+        return self.name
 
     # def __init__(self, name, description, coordinates):
     #     self.name = name
@@ -109,21 +113,27 @@ class BikeWayManager:
         self.bikeways = []
         self.date = datetime.datetime.now()
         self.parser = KMLParser()
-        self.timer = UpdateTimer(self)
+        self.timer = UpdateTimer(self, self.date)
 
     def parse_data(self):
         placemarks = self.parser.get_all_placemarks()
-        coordinates = ""
         for i in range(0, len(placemarks) - 1):
             name = self.parser.get_name_string_by_placemark_index(i)
             description = self.parser.get_description_by_placemark_index(i)
             linestrings = self.parser.get_line_strings_by_placemark_index(i)
+            coordinates = ""
 
-            for j in range (0, len(linestrings) - 1):
-                coordinates += self.parser.get_coordinates_by_indices(i, j)
+            for j in range(0, len(linestrings) - 1):
+                coordinates = coordinates + self.parser.get_coordinates_by_indices(i, j) + " "
 
-            bikeway = BikeWay.objects.get_or_create(name = name, description = description, coordinates = coordinates)
+            bikeway = BikeWay.objects.get_or_create(name=name, description=description, coordinates=coordinates)
             self.bikeways.append(bikeway)
+
+    def update_data(self):
+        self.parser = KMLParser()
+        self.timer = UpdateTimer(self, self.date)
+        self.bikeways = []
+        self.parse_data()
 
 
     # def add_route(self, route):
@@ -152,14 +162,16 @@ class BikeWayManager:
 
 class UpdateTimer:
     # 10 second threshold?
-    def __init__(self, manager):
+    def __init__(self, manager, date):
         self.manager = manager
-        self.time = time.time()
+        self.time = date
+        thread = Thread(target = UpdateTimer.spinning)
+        thread.start()
         manager.parse_data()
 
     def spinning(self):
         while True:
-            if time.time() - self.time > 10000000:
+            if time.time() - self.time > 10:
                 self.on_time_out()
 
     def on_time_out(self):
