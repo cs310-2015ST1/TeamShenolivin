@@ -2,7 +2,7 @@
 <html>
 
     <head>
-        <title>Route Planner</title>
+        <title>MegaByke Route Planner</title>
         <script src="http://maps.googleapis.com/maps/api/js"></script>
         <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans" />
         <style>
@@ -91,6 +91,24 @@
                 border: 2px solid #cfffff;
                 border-radius: 3px;
             }
+            
+            input[type=email] {
+                font-size: 15px;
+                font-family: 'Open Sans';
+                width: 200px;
+                height: 30px;
+                border: 2px solid #cfffff;
+                border-radius: 3px;
+            }
+            
+            input[type=password] {
+                font-size: 15px;
+                font-family: 'Open Sans';
+                width: 200px;
+                height: 30px;
+                border: 2px solid #cfffff;
+                border-radius: 3px;
+            }
 
        /*     #accountLi {
                 visibility: hidden;
@@ -104,7 +122,11 @@
 	            <ul>
 	            	<li> <a href="/RoutePlanner/"> Home </a> </li>
 	                <li> <a href="/RoutePlanner/register.html"> Get Started </a> </li>
-	                <li> <a href="login.html"> Log in </a> </li>
+	                {% if user.is_authenticated %}
+			        <li> <a href="/RoutePlanner/logout.html"> Log out </a> </li>
+			        {% else %}
+			        <li> <a href="/RoutePlanner/login.html"> Log in </a> </li>
+			        {% endif %}
 	                <li> <a href="questions.html"> FAQ </a> </li>
 	            </ul>
 	        </div>
