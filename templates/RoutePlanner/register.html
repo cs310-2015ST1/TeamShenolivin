@@ -7,14 +7,17 @@
         <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans" />
         <style>
             body {
+                background: #e0ffff;
+                padding: 0;
                 font-family: 'Open Sans';
-                text-size: 18px;
+                /*font-size: 18px;*/
                 margin-top: 50px;
             }
 
             h1 {
                 font-family: 'Open Sans';
                 text-align: center;
+                margin-bottom: 50px;
             }
 
             #navBar {
@@ -30,17 +33,19 @@
                 list-style: none;
                 margin-top: 0;
                 padding: 0;
-                z-index: 2;
+                z-index: 200000;
             }
 
             #navBar li {
                 display: inline-block;
-                width: 10%;
+                /*width: 10%;*/
                 color: #ffffff;
                 float: left;
                 text-align: center;
                 padding-top: 10px;
                 padding-bottom: 10px;
+                padding-right: 30px;
+                padding-left: 30px;
             }
 
             #navBar li:hover {
@@ -51,9 +56,13 @@
             #googleMap {
                 width: 70%;
                 height: 800px;
-                margin-left: 15%;
-                margin-right: 15%;
-                position: static;
+                float: left;
+            }
+
+            #infoInput {
+                width: 30%;
+                height: 800px;
+                float: left;
             }
 
             a {
@@ -61,6 +70,31 @@
                 outline: 0;
                 text-decoration: none;
             }
+
+            input[type=submit], input[type=button],
+            button {
+                font-size: 16px;
+                font-family: 'Open Sans';
+                height: 30px;
+                width: 200px;
+                border-radius: 3px;
+                border: 2px solid #77ffff;
+                margin-top: 20px;
+                background: #eeffff;
+            }
+
+            input[type=text] {
+                font-size: 15px;
+                font-family: 'Open Sans';
+                width: 200px;
+                height: 30px;
+                border: 2px solid #cfffff;
+                border-radius: 3px;
+            }
+
+       /*     #accountLi {
+                visibility: hidden;
+            }*/
         </style>
     </head>
 
@@ -69,7 +103,7 @@
 	        <div id='navBar'>
 	            <ul>
 	            	<li> <a href="/RoutePlanner/"> Home </a> </li>
-	                <li> <a href="/RoutePlanner/register"> Get Started </a> </li>
+	                <li> <a href="/RoutePlanner/register.html"> Get Started </a> </li>
 	                <li> <a href="login.html"> Log in </a> </li>
 	                <li> <a href="questions.html"> FAQ </a> </li>
 	            </ul>
@@ -87,7 +121,7 @@
             {% else %}
             <div align="center">
             
-            <form id="user_form" method="post" action="/RoutePlanner/register/"
+            <form id="user_form" method="post" action="/RoutePlanner/register.html"
                 enctype="multipart/form-data">
 
             {% csrf_token %}
