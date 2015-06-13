@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from RoutePlanner.forms import UserForm
-from RoutePlanner.models import UserProfile
+from RoutePlanner.models import UserProfile, BikeWay
 
 def index(request):
 
@@ -130,3 +130,7 @@ def user_logout(request):
 
     # Take the user back to the homepage.
     return HttpResponseRedirect('/RoutePlanner/')
+
+if __name__ == '__main__':
+    bikeway = BikeWay()
+    bikeway.update_data()

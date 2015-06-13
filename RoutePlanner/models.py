@@ -78,12 +78,14 @@ class UserProfile(models.Model):
         return self.user.username
     
 
+# stores all the bikeways in the database
+class BikeWay(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    coordinates = models.TextField()
 
-class BikeWay:
-    def __init__(self, name, description, coordinates):
-        self.name = name
-        self.description = description
-        self.coordinates = coordinates
+    def __unicode__(self):
+        return self.name
 
     # def __init__(self, name, description, coordinates):
     #     self.name = name
