@@ -112,8 +112,8 @@ class BikeWayManager:
     def __init__(self):
         self.bikeways = []
         self.date = datetime.datetime.now()
-        self.parser = KMLParser()
-        self.timer = UpdateTimer(self, self.date)
+        if __name__ == '__main__':
+            self.main()
 
     def parse_data(self):
         placemarks = self.parser.get_all_placemarks()
@@ -133,6 +133,11 @@ class BikeWayManager:
         self.parser = KMLParser()
         self.timer = UpdateTimer(self, self.date)
         self.bikeways = []
+        self.parse_data()
+
+    def main(self):
+        self.timer = UpdateTimer(self, self.date)
+        self.parser = KMLParser()
         self.parse_data()
 
 
@@ -165,14 +170,18 @@ class UpdateTimer:
     def __init__(self, manager, date):
         self.manager = manager
         self.time = date
-        thread = Thread(target = UpdateTimer.spinning)
+        thread = Thread(target=UpdateTimer.fetching)
         thread.start()
-        manager.parse_data()
 
-    def spinning(self):
+    def fetching(self):
+        parsed = False
         while True:
-            if time.time() - self.time > 10:
-                self.on_time_out()
+            if datetime.datetime.now().hour == 6 and datetime.datetime.now().minute == 0:
+                if not parsed:
+                    self.manager.parse_data()
+                    parsed = True
+            else:
+                parsed = False
 
     def on_time_out(self):
         raise Exception()
