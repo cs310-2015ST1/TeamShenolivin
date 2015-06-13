@@ -110,18 +110,19 @@
 	        <div id='navBar'>
 	            <ul>
 	            	<li> <a href="/RoutePlanner/"> Home </a> </li>
-	                <li> <a href="/RoutePlanner/register.html"> Get Started </a> </li>
+	            	<li> <a href="questions.html"> About </a> </li>                
 	                {% if user.is_authenticated %}
 			        <li> <a href="/RoutePlanner/logout.html"> Log out </a> </li>
+			        <li> <a href="/RoutePlanner/account.html"> My Account </a> </li>
 			        {% else %}
 			        <li> <a href="/RoutePlanner/login.html"> Log in </a> </li>
+			        <li> <a href="/RoutePlanner/register.html"> Get Started </a> </li>
 			        {% endif %}
-	                <li> <a href="questions.html"> FAQ </a> </li>
 	            </ul>
 	        </div>
 	    </nav>
 	    <div id='title'>
-	        <h1>Login to MegaByke</h1>
+	        <h1>Log in to MegaByke</h1>
 	        
 	        <div align="center">
 	

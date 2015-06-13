@@ -137,13 +137,15 @@
         <div id='navBar'>
             <ul>
             	<li> <a href="/RoutePlanner/"> Home </a> </li>
-                <li> <a href="/RoutePlanner/register.html"> Get Started </a> </li>
+            	<li> <a href="questions.html"> About </a> </li>                
                 {% if user.is_authenticated %}
 		        <li> <a href="/RoutePlanner/logout.html"> Log out </a> </li>
+		        <li> <a href="/RoutePlanner/account.html"> My Account </a> </li>
 		        {% else %}
 		        <li> <a href="/RoutePlanner/login.html"> Log in </a> </li>
+		        <li> <a href="/RoutePlanner/register.html"> Get Started </a> </li>
 		        {% endif %}
-                <li> <a href="questions.html"> FAQ </a> </li>
+                
                 <li id="accountLi"> <a href="accountpage.html"> My Account </a> </li>
                 <li id="additionalLi"> <a href="#"> Additional Functionality </a> </li>
             </ul>
