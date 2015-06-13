@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from RoutePlanner.forms import UserForm, UserProfileForm
+from RoutePlanner.models import BikeWay
 
 def index(request):
 
@@ -74,3 +75,8 @@ def register(request):
     return render(request,
             'RoutePlanner/register.html',
             {'user_form': user_form, 'profile_form': profile_form, 'registered': registered} )
+
+
+if __name__ == '__main__':
+    bikeway = BikeWay()
+    bikeway.update_data()

@@ -2,10 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from pykml import parser
 from zipfile import ZipFile
-import urllib
-import datetime
-import time
 from threading import Thread
+import urllib, datetime, time, signal
 
 # Create your models here.
 
@@ -111,11 +109,21 @@ class BikeWay(models.Model):
 class BikeWayManager:
     def __init__(self):
         self.bikeways = []
-        self.date = datetime.datetime.now()
-        if __name__ == '__main__':
-            self.main()
+        self.timer = UpdateTimer(self, datetime.datetime.now())
+
+    def signal_handler(self, signum, frame):
+        raise Exception("Timed out!")
+
+    def do_something(self):
+        return
+
+    def update_database(self):
+        for b in self.bikeways:
+            BikeWay.objects.update_or_create(name=b.name, description=b.description,
+                                             defaults={'coordinates': b.coordinates})
 
     def parse_data(self):
+        self.bikeways = []
         placemarks = self.parser.get_all_placemarks()
         for i in range(0, len(placemarks) - 1):
             name = self.parser.get_name_string_by_placemark_index(i)
@@ -126,19 +134,20 @@ class BikeWayManager:
             for j in range(0, len(linestrings) - 1):
                 coordinates = coordinates + self.parser.get_coordinates_by_indices(i, j) + " "
 
-            bikeway = BikeWay.objects.get_or_create(name=name, description=description, coordinates=coordinates)
+            bikeway = (name, description, coordinates)
             self.bikeways.append(bikeway)
 
     def update_data(self):
-        self.parser = KMLParser()
-        self.timer = UpdateTimer(self, self.date)
-        self.bikeways = []
-        self.parse_data()
-
-    def main(self):
-        self.timer = UpdateTimer(self, self.date)
-        self.parser = KMLParser()
-        self.parse_data()
+        self.timer.setTimer(datetime.datetime.now())
+        signal.signal(signal.SIGALRM, self.signal_handler)
+        signal.alarm(10)
+        try:
+            self.parser = KMLParser()
+            self.parse_data()
+        except Exception, msg:
+            self.do_something()
+        finally:
+            self.update_database()
 
 
     # def add_route(self, route):
@@ -166,20 +175,26 @@ class BikeWayManager:
 
 
 class UpdateTimer:
-    # 10 second threshold?
     def __init__(self, manager, date):
         self.manager = manager
         self.time = date
         thread = Thread(target=UpdateTimer.fetching)
         thread.start()
 
+    def setTimer(self, date):
+        self.time = date
+
     def fetching(self):
         parsed = False
+        SECONDS_IN_DAY = 86400
         while True:
             if datetime.datetime.now().hour == 6 and datetime.datetime.now().minute == 0:
                 if not parsed:
-                    self.manager.parse_data()
+                    current_time = time.time()
+                    self.manager.update_data()
                     parsed = True
+                    wait = time.time() - current_time
+                    time.sleep(SECONDS_IN_DAY - wait)
             else:
                 parsed = False
 
