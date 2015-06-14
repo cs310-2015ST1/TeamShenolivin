@@ -197,6 +197,7 @@ class UpdateTimer:
                     time.sleep(SECONDS_IN_DAY - wait)
             else:
                 parsed = False
+                time.sleep(SECONDS_IN_DAY - time.time() + SECONDS_IN_DAY/4)
 
     def on_time_out(self):
         raise Exception()
