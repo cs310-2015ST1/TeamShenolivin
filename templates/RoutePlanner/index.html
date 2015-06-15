@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <!-- Please do not change. At least inform me before making changes. -->
+{% load staticfiles %}
 <html>
 
     <head>
@@ -7,6 +8,7 @@
         <script src="http://maps.googleapis.com/maps/api/js"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans" />
+        <link rel="stylesheet" type="text/css" href="{% static "css/htmlStyle.css" %}" />
         <script type="text/javascript">
             var loggedIn = false;
             var times = 0;
@@ -136,16 +138,18 @@
     <nav>
         <div id='navBar'>
             <ul>
-            	<li> <a href="/RoutePlanner/"> Home </a> </li>
-                <li> <a href="/RoutePlanner/register.html"> Get Started </a> </li>
+            	<a href="/RoutePlanner/"> <li>Home </li></a> 
+            	<a href="/RoutePlanner/about.html"> <li> About </li></a>                     
                 {% if user.is_authenticated %}
-		        <li> <a href="/RoutePlanner/logout.html"> Log out </a> </li>
+		        <a href="/RoutePlanner/logout.html"> <li>Log Out</li></a> 
+		        <a href="/RoutePlanner/account.html"> <li>My Account</li></a> 
 		        {% else %}
-		        <li> <a href="/RoutePlanner/login.html"> Log in </a> </li>
+		        <a href="/RoutePlanner/login.html"><li>Log In</li></a> 
+		        <a href="/RoutePlanner/register.html"><li>Get Started</li></a> 
 		        {% endif %}
-                <li> <a href="questions.html"> FAQ </a> </li>
-                <li id="accountLi"> <a href="accountpage.html"> My Account </a> </li>
-                <li id="additionalLi"> <a href="#"> Additional Functionality </a> </li>
+                
+<!--                 <li id="accountLi"> <a href="accountpage.html"> My Account </a> </li> -->
+<!--                 <li id="additionalLi"> <a href="#"> Additional Functionality </a> </li> -->
             </ul>
         </div>
     </nav>

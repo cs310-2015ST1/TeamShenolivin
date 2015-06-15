@@ -108,20 +108,24 @@
     <body>
 	    <nav>
 	        <div id='navBar'>
-	            <ul>
-	            	<li> <a href="/RoutePlanner/"> Home </a> </li>
-	                <li> <a href="/RoutePlanner/register.html"> Get Started </a> </li>
-	                {% if user.is_authenticated %}
-			        <li> <a href="/RoutePlanner/logout.html"> Log out </a> </li>
-			        {% else %}
-			        <li> <a href="/RoutePlanner/login.html"> Log in </a> </li>
-			        {% endif %}
-	                <li> <a href="questions.html"> FAQ </a> </li>
-	            </ul>
+            <ul>
+            	<a href="/RoutePlanner/"> <li>Home </li></a> 
+            	<a href="/RoutePlanner/about.html"> <li> About </li></a>                   
+                {% if user.is_authenticated %}
+		        <a href="/RoutePlanner/logout.html"> <li>Log Out</li></a> 
+		        <a href="/RoutePlanner/account.html"> <li>My Account</li></a> 
+		        {% else %}
+		        <a href="/RoutePlanner/login.html"><li>Log In</li></a> 
+		        <a href="/RoutePlanner/register.html"><li>Get Started</li></a> 
+		        {% endif %}
+                
+<!--                 <li id="accountLi"> <a href="accountpage.html"> My Account </a> </li> -->
+<!--                 <li id="additionalLi"> <a href="#"> Additional Functionality </a> </li> -->
+            </ul>
 	        </div>
 	    </nav>
 	    <div id='title'>
-	        <h1>Login to MegaByke</h1>
+	        <h1>Log In to MegaByke</h1>
 	        
 	        <div align="center">
 	

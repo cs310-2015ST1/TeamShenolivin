@@ -131,6 +131,12 @@ def user_logout(request):
     # Take the user back to the homepage.
     return HttpResponseRedirect('/RoutePlanner/')
 
+<<<<<<< HEAD
+if __name__ == '__main__':
+    bikeway = BikeWay()
+    bikeway.update_data()
+=======
 def about(request):
     
     return render(request, 'RoutePlanner/about.html', {})
+>>>>>>> eddb06f7d7f1d572e68a4c1ce5a44df7892dc5d5

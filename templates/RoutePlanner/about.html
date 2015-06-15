@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
     <head>
         <title>MegaByke Route Planner</title>
         <script src="http://maps.googleapis.com/maps/api/js"></script>
@@ -91,16 +90,6 @@
                 border: 2px solid #cfffff;
                 border-radius: 3px;
             }
-            
-            input[type=email] {
-                font-size: 15px;
-                font-family: 'Open Sans';
-                width: 200px;
-                height: 30px;
-                border: 2px solid #cfffff;
-                border-radius: 3px;
-            }
-            
             input[type=password] {
                 font-size: 15px;
                 font-family: 'Open Sans';
@@ -121,7 +110,7 @@
 	        <div id='navBar'>
             <ul>
             	<a href="/RoutePlanner/"> <li>Home </li></a> 
-            	<a href="/RoutePlanner/about.html"> <li> About </li></a>                 
+            	<a href="/RoutePlanner/about.html"> <li> About </li></a>                     
                 {% if user.is_authenticated %}
 		        <a href="/RoutePlanner/logout.html"> <li>Log Out</li></a> 
 		        <a href="/RoutePlanner/account.html"> <li>My Account</li></a> 
@@ -135,34 +124,12 @@
             </ul>
 	        </div>
 	    </nav>
-        <div id='title'>
-            <h1> Create An Account </h1>
-            
-            {% if registered %}
-            <div align="center">
-            	Thank you for creating an account! <br/>
-            	<a href="/RoutePlanner/"> <font color = "blue">Return to RoutePlanner</font></a><br/>
-            </div>
-            
-            {% else %}
-            <div align="center">
-            
-            <form id="user_form" method="post" action="/RoutePlanner/register.html"
-                enctype="multipart/form-data">
-
-            {% csrf_token %}
-
-            {{ user_form.as_p }}
-            {{ profile_form.as_p }}
-
-            <!-- Provide a button to click to submit the form. -->
-            <input type="submit" name="submit" value="Register" />
-	        </form>
-	        </div>
-	        {% endif %}
+	    <div id='title'>
+	        <h1>About MegaByke</h1>
+	        This app does cool things.
+	        
+	        
         </div>
-    </body>
-    
-    
 
+    </body>
 </html>
