@@ -1,4 +1,103 @@
+body {
+    background: #e0ffff;
+    padding: 0;
+    font-family: 'Open Sans';
+    font-size: 18px;
+    margin-top: 50px;
+}
+
 h1 {
-    font-family: 'Big Caslon', 'Book Antiqua', 'Palatino Linotype', Georgia, serif;
+    font-family: 'Open Sans';
     text-align: center;
+    margin-bottom: 50px;
+}
+
+#navBar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #191970;
+    width: 100%;
+    padding: 0;
+}
+
+#navBar ul {
+    list-style: none;
+    margin-top: 0;
+    padding: 0;
+    z-index: 200000;
+}
+
+#navBar li {
+    display: inline-block;
+    /*width: 10%;*/
+    color: #ffffff;
+    float: left;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 30px;
+    padding-left: 30px;
+}
+
+#navBar li:hover {
+    background: #00ffff;
+    transition: 1s;
+}
+
+#googleMap {
+    width: 70%;
+    height: 500px;
+    float: left;
+}
+
+#infoInput {
+    width: 30%;
+    height: 800px;
+    float: left;
+}
+
+a {
+    color: #ffffff;
+    outline: 0;
+    text-decoration: none;
+}
+
+input[type=submit], input[type=button],
+button {
+    font-size: 16px;
+    font-family: 'Open Sans';
+    height: 30px;
+    width: 200px;
+    border-radius: 3px;
+    margin-top: 20px;
+    border: 0px;
+    background: #00ff00;
+}
+
+input[type=text], input[type=password] {
+    font-size: 15px;
+    font-family: 'Open Sans';
+    width: 200px;
+    height: 30px;
+    border: 1px solid black;
+    border-radius: 3px;
+    margin: 5px;
+}
+
+input[type=submit]:hover {
+	background: #00ffff;
+	transition: 1s;
+}
+
+.formInstruction {
+	width: 100px;
+}
+
+#unameinput {
+	width: 200px;
+}
+
+#passinput {
+	width: 200px;
 }
