@@ -153,9 +153,9 @@
             <h1> Route Planner </h1>          
         </div>
         <div id="infoInput">
-            {% if user.is_authenticated %}
+          <!--   {% if user.is_authenticated %}
             Logged in as {{ user.username }}<br/>
-            {% endif %}
+            {% endif %} -->
             <form>
                 <p class="instructions"> Enter your starting point: </p>
                 <input type="text" placeholder="Location"> <br/>
@@ -164,6 +164,8 @@
                 <input class="submitBtn" type="button" value="submit"> </input>
             </form>
             All Markers On Map:
+            <table>
+            </table>
             
             
         </div>
