@@ -7,14 +7,15 @@
         <title>MegaByke Route Planner</title>
         <script src="http://maps.googleapis.com/maps/api/js"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="{%  static "js/bikeWayPlotter.js" %}"></script>
         <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans" />
         <link rel="stylesheet" type="text/css" href="{% static "css/htmlStyle.css" %}" />
         <script type="text/javascript">
             var loggedIn = false;
             var times = 0;
             function hideAccountPage() {
-                document.getElementById("accountLi").style.visibility = "hidden";
-                document.getElementById('additionalLi').style.visibility = 'hidden';
+{#                document.getElementById("accountLi").style.visibility = "hidden";#}
+{#                document.getElementById('additionalLi').style.visibility = 'hidden';#}
             }
             function initialize() {
               var mapProp = {
@@ -23,8 +24,31 @@
                 mapTypeId:google.maps.MapTypeId.ROADMAP
               };
               var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
-              if (!loggedIn)
-                hideAccountPage();
+{#              if (!loggedIn)#}
+{#                hideAccountPage();#}
+
+{#              var testLine = [#}
+{#                      new google.maps.LatLng(49.2827,-123.1207),#}
+{#                      new google.maps.LatLng(49.3827,-123.1207)#}
+{#              ];#}
+{##}
+{#              var actualLine = new google.maps.Polyline({#}
+{#                  path: testLine,#}
+{#                  geodesic: true,#}
+{#                  strokeColor: '#FF0000',#}
+{#                  strokeOpacity: 1.0,#}
+{#                  strokeWeight: 2#}
+{#              });#}
+{##}
+{#              actualLine.setMap(map);#}
+                console.log("about to start");
+{#                var allBikeWays = [[[49.2327,-123.1207], [49.2827,-123.1907], [49.2227,-123.1207]],#}
+{#                    [[49.3827,-123.1207], [49.1827,-123.1207]]];#}
+                //var allBikeWays = [[49.2327,-123.1207], [49.2827,-123.1907], [49.2227,-123.1207]];
+                //TODO: iterate over all bikeWays, current method plots one successfully
+                plotBikeWay(map);
+                console.log("after plotLines");
+
             }
             google.maps.event.addDomListener(window, 'load', initialize);
 

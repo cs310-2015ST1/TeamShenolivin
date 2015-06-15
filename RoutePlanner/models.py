@@ -104,6 +104,7 @@ class BikeWay(models.Model):
     # def get_points(self):
     #     return self.points
 
+#allBikeWays = BikeWay.objects.all()
 
 # manages when the bikeway data is parsed
 class BikeWayManager:
@@ -136,6 +137,7 @@ class BikeWayManager:
 
             bikeway = (name, description, coordinates)
             self.bikeways.append(bikeway)
+
 
     def update_data(self):
         self.timer.setTimer(datetime.datetime.now())
