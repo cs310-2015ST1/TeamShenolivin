@@ -12,6 +12,7 @@ class KMLParser:
     url = "http://data.vancouver.ca/download/kml/bikeways.kmz"
 
     def __init__(self):
+        print "KML Parser initialized"
         # retrieve the kmz file from data vancouver url
         kmzData = urllib.urlretrieve(self.url, "data.kmz")
         # unzip the file
@@ -110,44 +111,49 @@ class BikeWayManager:
     def __init__(self):
         self.bikeways = []
         self.timer = UpdateTimer(self, datetime.datetime.now())
+        self.update_data()
 
     def signal_handler(self, signum, frame):
         raise Exception("Timed out!")
 
     def do_something(self):
-        return
+        print "hello"
 
     def update_database(self):
         for b in self.bikeways:
-            BikeWay.objects.update_or_create(name=b.name, description=b.description,
-                                             defaults={'coordinates': b.coordinates})
+            BikeWay.objects.update_or_create(name=b[0], description=b[1],
+                                             defaults={'coordinates': b[2]})
+        print 'database updated'
 
     def parse_data(self):
-        self.bikeways = []
+        temp_bikeways = []
         placemarks = self.parser.get_all_placemarks()
         for i in range(0, len(placemarks) - 1):
             name = self.parser.get_name_string_by_placemark_index(i)
             description = self.parser.get_description_by_placemark_index(i)
             linestrings = self.parser.get_line_strings_by_placemark_index(i)
-            coordinates = ""
+            coordinates = []
 
             for j in range(0, len(linestrings) - 1):
-                coordinates = coordinates + self.parser.get_coordinates_by_indices(i, j) + " "
+                coordinates.append(self.parser.get_coordinates_by_indices(i, j))
 
             bikeway = (name, description, coordinates)
-            self.bikeways.append(bikeway)
+            temp_bikeways.append(bikeway)
+
+        self.bikeways = temp_bikeways
 
     def update_data(self):
         self.timer.setTimer(datetime.datetime.now())
-        signal.signal(signal.SIGALRM, self.signal_handler)
-        signal.alarm(10)
         try:
+            signal.signal(signal.SIGALRM, self.signal_handler)
+            signal.alarm(10)
             self.parser = KMLParser()
             self.parse_data()
         except Exception, msg:
             self.do_something()
         finally:
             self.update_database()
+            signal.alarm(0)
 
 
     # def add_route(self, route):
@@ -178,7 +184,7 @@ class UpdateTimer:
     def __init__(self, manager, date):
         self.manager = manager
         self.time = date
-        thread = Thread(target=UpdateTimer.fetching)
+        thread = Thread(target=self.fetching)
         thread.start()
 
     def setTimer(self, date):
@@ -186,18 +192,23 @@ class UpdateTimer:
 
     def fetching(self):
         parsed = False
-        SECONDS_IN_DAY = 86400
-        while True:
-            if datetime.datetime.now().hour == 6 and datetime.datetime.now().minute == 0:
-                if not parsed:
-                    current_time = time.time()
-                    self.manager.update_data()
-                    parsed = True
-                    wait = time.time() - current_time
-                    time.sleep(SECONDS_IN_DAY - wait)
-            else:
-                parsed = False
-                time.sleep(SECONDS_IN_DAY - time.time() + SECONDS_IN_DAY/4)
+        # SECONDS_IN_DAY = 86400
+        # while True:
+        #     current_time = datetime.datetime.
+        #     if current_time.hour == 6 and current_time.minute == 0:
+        #         if not parsed:
+        #             current_time = time.time()
+        #             self.manager.update_data()
+        #             parsed = True
+        #             wait = time.time() - current_time
+        #             time.sleep(SECONDS_IN_DAY - wait)
+        #     else:
+        #         parsed = False
+        #         # if current_hour < 6:
+        #         #
 
     def on_time_out(self):
         raise Exception()
+
+# print "We made it here"
+# manager = BikeWayManager()
