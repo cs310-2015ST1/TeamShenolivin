@@ -192,7 +192,7 @@ class UpdateTimer:
 
     def fetching(self):
         parsed = False
-        # SECONDS_IN_DAY = 86400
+        SECONDS_IN_DAY = 86400
         # while True:
         #     current_time = datetime.datetime.
         #     if current_time.hour == 6 and current_time.minute == 0:
