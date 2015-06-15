@@ -42,91 +42,7 @@
 
         </script>
         <style>
-            body {
-                background: #e0ffff;
-                padding: 0;
-                font-family: 'Open Sans';
-                font-size: 18px;
-                margin-top: 50px;
-            }
 
-            h1 {
-                font-family: 'Open Sans';
-                text-align: center;
-                margin-bottom: 50px;
-            }
-
-            #navBar {
-                position: fixed;
-                top: 0;
-                left: 0;
-                background: #191970;
-                width: 100%;
-                padding: 0;
-            }
-
-            #navBar ul {
-                list-style: none;
-                margin-top: 0;
-                padding: 0;
-                z-index: 200000;
-            }
-
-            #navBar li {
-                display: inline-block;
-                /*width: 10%;*/
-                color: #ffffff;
-                float: left;
-                text-align: center;
-                padding-top: 10px;
-                padding-bottom: 10px;
-                padding-right: 30px;
-                padding-left: 30px;
-            }
-
-            #navBar li:hover {
-                background: #00ffff;
-                transition: 1s;
-            }
-
-            #googleMap {
-                width: 70%;
-                height: 800px;
-                float: left;
-            }
-
-            #infoInput {
-                width: 30%;
-                height: 800px;
-                float: left;
-            }
-
-            a {
-                color: #ffffff;
-                outline: 0;
-                text-decoration: none;
-            }
-
-            input[type=submit], input[type=button],
-            button {
-                font-size: 16px;
-                font-family: 'Open Sans';
-                height: 30px;
-                width: 70%;
-                border-radius: 3px;
-                margin-top: 20px;
-                border: 0px;
-                background: #00ff00;
-            }
-
-            input[type=text] {
-                font-size: 15px;
-                font-family: 'Open Sans';
-                width: 70%;
-                height: 30px;
-                border: 1px solid black;
-                border-radius: 3px;
-            }
 
        /*     #accountLi {
                 visibility: hidden;
@@ -157,9 +73,9 @@
             <h1> Route Planner </h1>          
         </div>
         <div id="infoInput">
-            {% if user.is_authenticated %}
+          <!--   {% if user.is_authenticated %}
             Logged in as {{ user.username }}<br/>
-            {% endif %}
+            {% endif %} -->
             <form>
                 <p class="instructions"> Enter your starting point: </p>
                 <input type="text" placeholder="Location"> <br/>
@@ -168,6 +84,8 @@
                 <input class="submitBtn" type="button" value="submit"> </input>
             </form>
             All Markers On Map:
+            <table id="markerTable">
+            </table>
             
             
         </div>
