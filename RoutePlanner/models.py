@@ -209,9 +209,3 @@ class UpdateTimer:
 
     def on_time_out(self):
         raise Exception()
-
-from django import setup
-setup()
-
-print "We made it here"
-manager = BikeWayManager()

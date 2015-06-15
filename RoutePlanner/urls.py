@@ -8,3 +8,9 @@ urlpatterns = patterns('',
         url(r'^logout.html$', views.user_logout, name='logout'),
         url(r'^about.html$', views.about, name='about'),
 )
+
+from django import setup
+setup()
+
+print "We made it here"
+manager = models.BikeWayManager()
