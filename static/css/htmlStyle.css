@@ -75,7 +75,7 @@ button {
     background: #00ff00;
 }
 
-input[type=text], input[type=password] {
+input[type=text], input[type=password], input[type=email]{
     font-size: 15px;
     font-family: 'Open Sans';
     width: 200px;
