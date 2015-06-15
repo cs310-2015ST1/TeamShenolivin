@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, url
-from RoutePlanner import views
+from RoutePlanner import views, models
 
 urlpatterns = patterns('',
         url(r'^$', views.index, name='index'),
