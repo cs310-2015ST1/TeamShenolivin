@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, url
 from RoutePlanner import views, models
+import threading
 
 urlpatterns = patterns('',
         url(r'^$', views.index, name='index'),
@@ -12,5 +13,5 @@ urlpatterns = patterns('',
 from django import setup
 setup()
 
-print "We made it here"
+# print threading.currentThread()
 manager = models.BikeWayManager()

@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from pykml import parser
 from zipfile import ZipFile
 from threading import Thread
-import urllib, datetime, time, signal
+import urllib, datetime, time, signal, threading
 
 # Create your models here.
 
@@ -117,13 +117,13 @@ class BikeWayManager:
         raise Exception("Timed out!")
 
     def do_something(self):
-        print "hello"
+        print "exception thrown"
 
     def update_database(self):
         for b in self.bikeways:
             BikeWay.objects.update_or_create(name=b[0], description=b[1],
                                              defaults={'coordinates': b[2]})
-        print 'database updated'
+        print self.bikeways[1]
 
     def parse_data(self):
         temp_bikeways = []
@@ -143,17 +143,17 @@ class BikeWayManager:
         self.bikeways = temp_bikeways
 
     def update_data(self):
-        self.timer.setTimer(datetime.datetime.now())
+        # self.timer.setTimer(datetime.datetime.now())
+        # signal.signal(signal.SIGALRM, self.signal_handler)
+        # signal.alarm(10)
         try:
-            signal.signal(signal.SIGALRM, self.signal_handler)
-            signal.alarm(10)
             self.parser = KMLParser()
             self.parse_data()
+            # signal.alarm(0)
         except Exception, msg:
             self.do_something()
         finally:
             self.update_database()
-            signal.alarm(0)
 
 
     # def add_route(self, route):
@@ -193,6 +193,7 @@ class UpdateTimer:
     def fetching(self):
         parsed = False
         SECONDS_IN_DAY = 86400
+        # print threading.currentThread()
         # while True:
         #     current_time = datetime.datetime.
         #     if current_time.hour == 6 and current_time.minute == 0:
