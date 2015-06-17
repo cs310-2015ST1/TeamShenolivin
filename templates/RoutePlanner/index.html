@@ -7,15 +7,17 @@
         <title>MegaByke Route Planner</title>
         <script src="http://maps.googleapis.com/maps/api/js"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="{%  static "js/bikeWayPlotter" %}"></script>
         <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans" />
         <link rel="stylesheet" type="text/css" href="{% static "css/htmlStyle.css" %}" />
+        <input type="hidden" id="allBikeWays" name="variable" value="{{ allBikeWays }}">
         <script type="text/javascript">
             var loggedIn = false;
             var times = 0;
-            function hideAccountPage() {
-                document.getElementById("accountLi").style.visibility = "hidden";
-                document.getElementById('additionalLi').style.visibility = 'hidden';
-            }
+{#            function hideAccountPage() {#}
+{#                document.getElementById("accountLi").style.visibility = "hidden";#}
+{#                document.getElementById('additionalLi').style.visibility = 'hidden';#}
+{#            }#}
             function initialize() {
               var mapProp = {
                 center:new google.maps.LatLng(49.2827,-123.1207),
@@ -23,8 +25,19 @@
                 mapTypeId:google.maps.MapTypeId.ROADMAP
               };
               var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
-              if (!loggedIn)
-                hideAccountPage();
+{#              if (!loggedIn)#}
+{#                hideAccountPage();#}
+
+              var allBikeWays = "{{ allBikeWays|safe}}";
+              console.log(allBikeWays[1]);
+              console.log("under defined var");
+
+              for (var i = 0; i < allBikeWays.length; i++) {
+                  plotBikeWay(allBikeWays[i], map);
+                  console.log("in index for loop");
+              }
+{#              plotBikeWay(map);#}
+              console.log("after plotLines");
             }
             google.maps.event.addDomListener(window, 'load', initialize);
 

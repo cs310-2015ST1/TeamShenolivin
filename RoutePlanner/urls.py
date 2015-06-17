@@ -15,3 +15,5 @@ setup()
 
 # print threading.currentThread()
 manager = models.BikeWayManager()
+allBikeWays = list(manager.bikeways)
+print "in urls under variable"

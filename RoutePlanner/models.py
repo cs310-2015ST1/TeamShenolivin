@@ -123,7 +123,7 @@ class BikeWayManager:
         for b in self.bikeways:
             BikeWay.objects.update_or_create(name=b[0], description=b[1],
                                              defaults={'coordinates': b[2]})
-        print self.bikeways[1]
+        #print self.bikeways[1]
 
     def parse_data(self):
         temp_bikeways = []
