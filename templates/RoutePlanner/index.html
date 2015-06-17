@@ -31,8 +31,8 @@
 {#                hideAccountPage();#}
 
 
-              var allBikeWays = ["{{ dallBikeWays|safe}}"];
-              console.log(allBikeWays[1]);
+              var allBikeWays = {{ allBikeWays }};
+              console.log(allBikeWays[0]);
               console.log("under defined var");
               console.log("above for loop");
               for (var i = 0; i < allBikeWays.length; i++) {

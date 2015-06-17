@@ -62,6 +62,7 @@ class KMLParser:
         coordinates_string = self.placemarks[pmindex].MultiGeometry.LineString[lsindex].coordinates.text
         coordinates_list = coordinates_string.split(',0 ')
         # remove pure white space string (the last one)
+        coordinates_list = filter(None, coordinates_list)
         # for coordinate in coordinates_list:
         #     if len(coordinate) < 5:
         #         coordinates_list.remove(coordinate)
@@ -140,6 +141,7 @@ class BikeWayManager:
 
             bikeway = (name, description, coordinates)
             temp_bikeways.append(bikeway)
+            
 
         self.bikeways = temp_bikeways
 
