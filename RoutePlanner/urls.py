@@ -13,5 +13,5 @@ urlpatterns = patterns('',
 from django import setup
 setup()
 
-# print threading.currentThread()
+print threading.currentThread()
 manager = models.BikeWayManager()

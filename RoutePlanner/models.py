@@ -88,22 +88,20 @@ class BikeWay(models.Model):
     def __unicode__(self):
         return self.name
 
-    # def __init__(self, name, description, coordinates):
-    #     self.name = name
-    #     self.description = description
-    #     self.coordinates = coordinates
-
-    # def add_point(self, point):
-    #     self.points.append(point)
-    #
-    # def remove_point(self, point):
-    #     self.points.remove(point)
-    #
-    # def find_point(self, point):
-    #     return self.points.__contains__(point)
-    #
-    # def get_points(self):
-    #     return self.points
+# class Route(models.Model):
+#     self.points = []
+#
+#     def add_point(self, point):
+#         self.points.append(point)
+#
+#     def remove_point(self, point):
+#         self.points.remove(point)
+#
+#     def find_point(self, point):
+#         return self.points.__contains__(point)
+#
+#     def get_points(self):
+#         return self.points
 
 
 # manages when the bikeway data is parsed
@@ -123,7 +121,7 @@ class BikeWayManager:
         for b in self.bikeways:
             BikeWay.objects.update_or_create(name=b[0], description=b[1],
                                              defaults={'coordinates': b[2]})
-        print self.bikeways[1]
+        print "database updated"
 
     def parse_data(self):
         temp_bikeways = []
@@ -156,28 +154,25 @@ class BikeWayManager:
             self.update_database()
 
 
-    # def add_route(self, route):
-    #     self.routes.append(route)
-    #
-    # def remove_route(self, route):
-    #     self.routes.remove(route)
-    #
-    # def clear_routes(self):
-    #     self.routes = []
-    #
-    # def find_route(self, route):
-    #     return self.routes.__contains__(route)
-    #
-    # def update_data(self):
-    #     self.clear_routes()
-    #     data = self.parser.parse_data()
-    #     for route in data:
-    #         self.add_route(route)
-    #     self.date = datetime.datetime.now()
-    #
-    # def get_points(self):
-    #     for route in self.routes:
-    #         route.getPoints()
+class RouteManager:
+    def __init__(self):
+        self.routes = []
+
+    def add_route(self, route):
+        self.routes.append(route)
+
+    def remove_route(self, route):
+        self.routes.remove(route)
+
+    def clear_routes(self):
+        self.routes = []
+
+    def find_route(self, route):
+        return self.routes.__contains__(route)
+
+    def get_points(self):
+        for route in self.routes:
+            route.getPoints()
 
 
 class UpdateTimer:
@@ -193,20 +188,20 @@ class UpdateTimer:
     def fetching(self):
         parsed = False
         SECONDS_IN_DAY = 86400
-        # print threading.currentThread()
-        # while True:
-        #     current_time = datetime.datetime.
-        #     if current_time.hour == 6 and current_time.minute == 0:
-        #         if not parsed:
-        #             current_time = time.time()
-        #             self.manager.update_data()
-        #             parsed = True
-        #             wait = time.time() - current_time
-        #             time.sleep(SECONDS_IN_DAY - wait)
-        #     else:
-        #         parsed = False
-        #         # if current_hour < 6:
-        #         #
+        print threading.currentThread()
+        print "Threads active: " + threading.activeCount()
+        while True:
+            current_time = datetime.datetime.now()
+            if current_time.hour == 6 and current_time.minute == 0:
+                if not parsed:
+                    current_time = time.time()
+                    self.manager.update_data()
+                    parsed = True
+                    wait = time.time() - current_time
+                    time.sleep(SECONDS_IN_DAY - wait)
+            else:
+                parsed = False
+                time.sleep(10000000)
 
     def on_time_out(self):
         raise Exception()
