@@ -1,23 +1,14 @@
-/**
- * Created by Sharon on 15/06/2015.
- */
-
-//var allBikeWays = {{}};
-//var allBikeWays = [[[49.2327,-123.1207], [49.2827,-123.1907], [49.2227,-123.1207]],
-//                    [[49.3827,-123.1207], [49.1827,-123.1207]]];
-
-function plotBikeWay(map) {
-    var allBikeWays = [[49.2327,-123.1207], [49.2827,-123.1907], [49.2227,-123.1207]];
+function plotBikeWay(BikeWay, map) {
+    var completeBikeWay = BikeWay;
     var bikeWayCoords = [];
-    for (var i = 0; i < allBikeWays.length; i++) {
-
+    for (var i = 0; i < completeBikeWay.length; i++) {
         //for (var j = 0; j < allBikeWays[i].coordinates.length; j++){
-        var latLong = new google.maps.LatLng(allBikeWays[i][0], allBikeWays[i][1]);
+        var latLong = new google.maps.LatLng(completeBikeWay[i][0], completeBikeWay[i][1]);
         console.log(allBikeWays[i][0], allBikeWays[i][1]);
         bikeWayCoords.push(latLong);
 
 
-        console.log("got here");
+        //console.log("got here");
         //};
     }
         var bikeWayLine = new google.maps.Polyline({
