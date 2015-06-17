@@ -73,7 +73,6 @@ class KMLParser:
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     
-    #website = models.URLField(blank=True)
     searchLocations = []
     
     def __unicode__(self):
