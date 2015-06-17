@@ -73,9 +73,7 @@
             <h1> Route Planner </h1>          
         </div>
         <div id="infoInput">
-          <!--   {% if user.is_authenticated %}
-            Logged in as {{ user.username }}<br/>
-            {% endif %} -->
+            
             <form>
                 <p class="instructions"> Enter your starting point: </p>
                 <input type="text" placeholder="Location"> <br/>
@@ -86,7 +84,9 @@
             All Markers On Map:
             <table id="markerTable">
             </table>
-            
+            {% if user.is_authenticated %}
+            	Logged in as {{ user.username }}<br/>
+            {% endif %}
             
         </div>
         <div id="googleMap">
