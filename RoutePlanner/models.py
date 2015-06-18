@@ -62,11 +62,17 @@ class KMLParser:
         coordinates_string = self.placemarks[pmindex].MultiGeometry.LineString[lsindex].coordinates.text
         coordinates_list = coordinates_string.split(',0 ')
         # remove pure white space string (the last one)
-        coordinates_list = filter(None, coordinates_list)
         # for coordinate in coordinates_list:
         #     if len(coordinate) < 5:
         #         coordinates_list.remove(coordinate)
-        return coordinates_list
+        coordinates_list = filter(None, coordinates_list)
+        segmentCoords = []
+        for coordPair in coordinates_list:
+            coordPairList = coordPair.split(',')
+            segmentCoords.append([float(coordPairList[1]),float(coordPairList[0])])
+
+        
+        return segmentCoords
 
 
 # contains all user data
@@ -129,19 +135,19 @@ class BikeWayManager:
     def parse_data(self):
         temp_bikeways = []
         placemarks = self.parser.get_all_placemarks()
-        for i in range(0, len(placemarks) - 1):
+        for i in range(0, len(placemarks)):
             name = self.parser.get_name_string_by_placemark_index(i)
             description = self.parser.get_description_by_placemark_index(i)
             linestrings = self.parser.get_line_strings_by_placemark_index(i)
             coordinates = []
 
-            for j in range(0, len(linestrings) - 1):
+            for j in range(0, len(linestrings)):
                 coordinates.append(self.parser.get_coordinates_by_indices(i, j))
 
             bikeway = (name, description, coordinates)
             temp_bikeways.append(bikeway)
             
-
+        
         self.bikeways = temp_bikeways
 
 

@@ -12,28 +12,20 @@ def index(request):
     allBikeWays = list(manager.bikeways)
     bikeWayCoords = []
     # put all the bikeway segments into one list
+    # print allBikeWays[0]
     for b in allBikeWays:
         
-        coordListString = b[2]
+        coordList = b[2]
         #print coordListString
          
-        bikeWayCoords+=coordListString # dirty fix- revisit this later
+        bikeWayCoords+=coordList # dirty fix- revisit this later
+        
+    # print allBikeWays[121]
     
     # print bikeWayCoords[0]
-    
-    # convert the strings to floats
-    bikeWayCoordsFloat = []
-    for coordSet in bikeWayCoords:
-        segmentCoords = []
-        for coordPair in coordSet:
-            coordPairList = coordPair.split(',')
-            segmentCoords.append([float(coordPairList[1]),float(coordPairList[0])])
-            
-            
-        bikeWayCoordsFloat.append(segmentCoords)
-    
-    print bikeWayCoordsFloat[0]    
-    context_dict = {'allBikeWays': bikeWayCoordsFloat}
+
+    # print bikeWayCoords[0]    
+    context_dict = {'allBikeWays': bikeWayCoords}
 
     # Return a rendered response to send to the client.
     # We make use of the shortcut function to make our lives easier.
