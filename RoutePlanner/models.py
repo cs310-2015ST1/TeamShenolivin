@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from pykml import parser
 from zipfile import ZipFile
 from threading import Thread
-import urllib, datetime, time, signal
+import urllib, datetime, time, signal, os
 
 # Create your models here.
 
@@ -149,12 +149,11 @@ class BikeWayManager:
             signal.alarm(10)
             self.parser = KMLParser()
             self.parse_data()
+            signal.alarm(0)
         except Exception, msg:
             self.do_something()
         finally:
             self.update_database()
-            signal.alarm(0)
-
 
     # def add_route(self, route):
     #     self.routes.append(route)
