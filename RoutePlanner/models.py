@@ -10,41 +10,47 @@ import urllib, datetime, time, signal, threading
 # class for kml file retrieving and parsing
 class KMLParser:
     url = "http://data.vancouver.ca/download/kml/bikeways.kmz"
+    class __KMLParser:
+        def __init__(self):
+            print "KML Parser initialized"
+            # retrieve the kmz file from data vancouver url
+            kmzData = urllib.urlretrieve(self.url, "data.kmz")
+            # unzip the file
+            kmz = ZipFile(kmzData[0], 'r')
+            # open the kml file in the archive
+            kml = kmz.open('bikeways.kml', 'r')
+            # get real data in kml file
+            self.content = parser.parse(kml).getroot()
+            # all placemarks in kml file
+            self.placemarks = self.content.Document.Folder.Placemark
+        def __unicode__(self):
+            return "This is a singleton Parser."
+    instance = None
 
     def __init__(self):
-        print "KML Parser initialized"
-        # retrieve the kmz file from data vancouver url
-        kmzData = urllib.urlretrieve(self.url, "data.kmz")
-        # unzip the file
-        kmz = ZipFile(kmzData[0], 'r')
-        # open the kml file in the archive
-        kml = kmz.open('bikeways.kml', 'r')
-        # get real data in kml file
-        self.content = parser.parse(kml).getroot()
-        # all placemarks in kml file
-        self.placemarks = self.content.Document.Folder.Placemark
-
+        if not KMLParser.instance:
+            KMLParser.instance = KMLParser.__KMLParser()
     # note that the objects parsed by the parser
     # are all of type "lxml.objectify.StringElement",
     # in order to turn them into strings, use '.text'
     # method
     def get_all_placemarks(self):
-        return self.placemarks
+        return self.__KMLParser.placemarks
 
     def get_placemark_by_index(self, index):
-        return self.placemarks[index]
+        return self.__KMLParser.placemarks[index]
 
     def get_all_line_strings(self):
         returnVal = []
-        for placemark in self.placemarks:
+        for placemark in self.__KMLParser.placemarks:
             returnVal.extend(placemark.MultiGeometry.LineString)
         return returnVal
 
     def get_line_strings_by_placemark_index(self, index):
-        return self.placemarks[index].MultiGeometry.LineString
+        return self.__KMLParser.placemarks[index].MultiGeometry.LineString
 
     def get_description_by_placemark_index(self, index):
-        return self.placemarks[index].description
+        return self.__KMLParser.placemarks[index].description
 
     # all methods containing 'string' are already
     # returning type string, no need to use '.text'
@@ -53,13 +59,13 @@ class KMLParser:
         return description.text.split('<')[0].strip()
 
     def get_name_string_by_placemark_index(self, index):
-        return self.placemarks[index].name.text
+        return self.__KMLParser.placemarks[index].name.text
 
     # returns a list of coordinate strings.
     # @param pmindex: index of placemark
     # @param lsindex: index of LineString inside the placemark
     def get_coordinates_by_indices(self, pmindex, lsindex):
-        coordinates_string = self.placemarks[pmindex].MultiGeometry.LineString[lsindex].coordinates.text
+        coordinates_string = self.__KMLParser.placemarks[pmindex].MultiGeometry.LineString[lsindex].coordinates.text
         coordinates_list = coordinates_string.split(',0 ')
         # remove pure white space string (the last one)
         coordinates_list = filter(None, coordinates_list)
@@ -67,7 +73,7 @@ class KMLParser:
         for coordPair in coordinates_list:
             coordPairList = coordPair.split(',')
             segmentCoords.append([float(coordPairList[1]),float(coordPairList[0])])
-        
+
         # for coordinate in coordinates_list:
         #     if len(coordinate) < 5:
         #         coordinates_list.remove(coordinate)
