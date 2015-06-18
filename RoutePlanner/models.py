@@ -63,10 +63,15 @@ class KMLParser:
         coordinates_list = coordinates_string.split(',0 ')
         # remove pure white space string (the last one)
         coordinates_list = filter(None, coordinates_list)
+        segmentCoords = []
+        for coordPair in coordinates_list:
+            coordPairList = coordPair.split(',')
+            segmentCoords.append([float(coordPairList[1]),float(coordPairList[0])])
+        
         # for coordinate in coordinates_list:
         #     if len(coordinate) < 5:
         #         coordinates_list.remove(coordinate)
-        return coordinates_list
+        return segmentCoords
 
 
 # contains all user data

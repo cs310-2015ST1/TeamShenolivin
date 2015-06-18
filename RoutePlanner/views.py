@@ -28,8 +28,7 @@ def index(request):
         for coordPair in coordSet:
             coordPairList = coordPair.split(',')
             segmentCoords.append([float(coordPairList[1]),float(coordPairList[0])])
-            
-            
+
         bikeWayCoordsFloat.append(segmentCoords)
     
     print bikeWayCoordsFloat[0]    
