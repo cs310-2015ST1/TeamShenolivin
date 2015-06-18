@@ -62,6 +62,7 @@ class KMLParser:
         coordinates_string = self.placemarks[pmindex].MultiGeometry.LineString[lsindex].coordinates.text
         coordinates_list = coordinates_string.split(',0 ')
         # remove pure white space string (the last one)
+        coordinates_list = filter(None, coordinates_list)
         # for coordinate in coordinates_list:
         #     if len(coordinate) < 5:
         #         coordinates_list.remove(coordinate)
@@ -72,7 +73,6 @@ class KMLParser:
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     
-    #website = models.URLField(blank=True)
     searchLocations = []
     
     def __unicode__(self):
@@ -104,6 +104,8 @@ class BikeWay(models.Model):
 #         return self.points
 
 
+#allBikeWays = BikeWay.objects.all()
+
 # manages when the bikeway data is parsed
 class BikeWayManager:
     def __init__(self):
@@ -121,7 +123,7 @@ class BikeWayManager:
         for b in self.bikeways:
             BikeWay.objects.update_or_create(name=b[0], description=b[1],
                                              defaults={'coordinates': b[2]})
-        print "database updated"
+        #print self.bikeways[1]
 
     def parse_data(self):
         temp_bikeways = []
@@ -137,8 +139,10 @@ class BikeWayManager:
 
             bikeway = (name, description, coordinates)
             temp_bikeways.append(bikeway)
+            
 
         self.bikeways = temp_bikeways
+
 
     def update_data(self):
         # self.timer.setTimer(datetime.datetime.now())

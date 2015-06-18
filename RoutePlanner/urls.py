@@ -13,5 +13,7 @@ urlpatterns = patterns('',
 from django import setup
 setup()
 
-print threading.currentThread()
-manager = models.BikeWayManager()
+# print threading.currentThread()
+# manager = models.BikeWayManager()
+# allBikeWays = list(manager.bikeways)
+# print "in urls under variable"
