@@ -2,13 +2,38 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from RoutePlanner.forms import UserForm
-from RoutePlanner.models import UserProfile, BikeWay
+from RoutePlanner.models import UserProfile, BikeWay, BikeWayManager
 
 def index(request):
 
     # Construct a dictionary to pass to the template engine as its context.
     # Note the key boldmessage is the same as {{ boldmessage }} in the template!
-    context_dict = {'boldmessage': "I am bold font from the context"}
+    manager = BikeWayManager()
+    allBikeWays = list(manager.bikeways)
+    bikeWayCoords = []
+    # put all the bikeway segments into one list
+    for b in allBikeWays:
+        
+        coordListString = b[2]
+        #print coordListString
+         
+        bikeWayCoords+=coordListString # dirty fix- revisit this later
+    
+    # print bikeWayCoords[0]
+    
+    # convert the strings to floats
+    bikeWayCoordsFloat = []
+    for coordSet in bikeWayCoords:
+        segmentCoords = []
+        for coordPair in coordSet:
+            coordPairList = coordPair.split(',')
+            segmentCoords.append([float(coordPairList[1]),float(coordPairList[0])])
+            
+            
+        bikeWayCoordsFloat.append(segmentCoords)
+    
+    print bikeWayCoordsFloat[0]    
+    context_dict = {'allBikeWays': bikeWayCoordsFloat}
 
     # Return a rendered response to send to the client.
     # We make use of the shortcut function to make our lives easier.
