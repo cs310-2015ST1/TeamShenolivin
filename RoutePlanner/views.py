@@ -11,6 +11,8 @@ def index(request):
     print "manager to be initialized"
     manager = BikeWayManager()
     allBikeWays = list(manager.bikeways)
+    updateTime = manager.get_time()
+    print updateTime
     bikeWayCoords = []
     # put all the bikeway segments into one list
     for b in allBikeWays:
@@ -19,7 +21,8 @@ def index(request):
          
         bikeWayCoords+=coordList # dirty fix- revisit this later
     
-    context_dict = {'allBikeWays': bikeWayCoords}
+    context_dict = {'allBikeWays': bikeWayCoords,
+                    'updateTime': updateTime}
 
     # Return a rendered response to send to the client.
     # We make use of the shortcut function to make our lives easier.

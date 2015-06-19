@@ -110,6 +110,8 @@
             {% if user.is_authenticated %}
             	Logged in as {{ user.username }}<br/>
             {% endif %}
+            <br/>
+            	Last updated: {{ updateTime|safe }}
             
         </div>
         <div id="googleMap">
