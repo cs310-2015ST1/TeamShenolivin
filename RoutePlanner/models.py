@@ -169,7 +169,7 @@ class BikeWayManager:
         return setattr(self.instance, name)
 
     def get_time(self):
-        return instance.get_time()
+        return BikeWayManager.instance.get_time()
 
 
 class UpdateTimer:
