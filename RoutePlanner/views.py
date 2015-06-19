@@ -11,6 +11,10 @@ def index(request):
     print "manager to be initialized"
     manager = BikeWayManager()
     allBikeWays = list(manager.bikeways)
+    
+    if (request.GET.get('update')):
+        manager.update_data()
+    
     updateTime = manager.instance.get_time()
     print updateTime
     bikeWayCoords = []
@@ -145,3 +149,4 @@ def user_logout(request):
 
 def about(request):
     return render(request, 'RoutePlanner/about.html', {})
+
