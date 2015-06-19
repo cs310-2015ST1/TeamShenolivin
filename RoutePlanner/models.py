@@ -96,6 +96,8 @@ class BikeWay(models.Model):
         return self.name
 
 
+# singleton pattern adapted from:
+# http://python-3-patterns-idioms-test.readthedocs.org/en/latest/Singleton.html
 # manages when the bikeway data is parsed
 class BikeWayManager:
     class __BikeWayManager:
@@ -106,6 +108,9 @@ class BikeWayManager:
     
         def __str__(self):
             return 'self'
+        
+        def get_time(self):
+            return self.timer.get_time()
 
         def update_database(self):
             for b in self.bikeways:
@@ -158,6 +163,9 @@ class BikeWayManager:
     def __setattr__(self, name):
         return setattr(self.instance, name)
 
+    def get_time(self):
+        return instance.get_time()
+
 
 class UpdateTimer:
     def __init__(self, manager, date):
@@ -166,19 +174,22 @@ class UpdateTimer:
         print "thread started"
         thread = Thread(target=self.fetching)
         thread.start()
+    
+    def get_time(self, date):
+        return self.time.strftime("%Y-%m-%d at %H:%M:%S")
 
-    def setTimer(self, date):
+    def set_time(self, date):
         self.time = date
 
     def fetching(self):
         parsed = False
         SECONDS_IN_DAY = 86400
         while True:
-            current_date = datetime.datetime.now()
+            self.time = datetime.datetime.now()
             target_time = datetime.time(6,0)
-            target_date = datetime.datetime.combine(current_date, target_time)
-            print str(abs(current_date - target_date).total_seconds())
-            if abs(current_date - target_date).total_seconds() < 10:
+            target_date = datetime.datetime.combine(self.time, target_time)
+            time_difference = (self.time - target_date).total_seconds()
+            if abs(time_difference) < 5:
                 print "we've reached 6 o'clock"
                 if not parsed:
                     print "it's 6 o'clock - time to parse"
@@ -188,12 +199,12 @@ class UpdateTimer:
             else:
                 print "it's not 6 o'clock"
                 parsed = False
-                if (current_date < target_date):
-                    to_sleep = (target_date - current_date).total_seconds()
+                if (self.time < target_date):
+                    to_sleep = (target_date - self.time).total_seconds()
                     print str(to_sleep)
                     time.sleep(to_sleep)
 
                 else:
-                    to_sleep = SECONDS_IN_DAY - (target_date - current_date).total_seconds()
+                    to_sleep = SECONDS_IN_DAY - (self.time - target_date).total_seconds()
                     print str(to_sleep)
                     time.sleep(to_sleep)
