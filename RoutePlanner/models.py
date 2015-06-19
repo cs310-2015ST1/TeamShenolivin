@@ -150,6 +150,7 @@ class BikeWayManager:
         if BikeWayManager.instance is None:
             print "no instance yet"
             BikeWayManager.instance = BikeWayManager.__BikeWayManager()
+            BikeWayManager.instance.update_data()
 
     def __getattr__(self, name):
         return getattr(self.instance, name)
