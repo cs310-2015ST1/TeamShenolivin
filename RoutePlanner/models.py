@@ -103,7 +103,7 @@ class BikeWayManager:
     class __BikeWayManager:
         def __init__(self):
             self.bikeways = []
-            print "make timer"
+            print "making timer"
             self.timer = UpdateTimer(self, datetime.datetime.now())
     
         def __str__(self):
@@ -111,11 +111,15 @@ class BikeWayManager:
         
         def get_time(self):
             return self.timer.get_time()
+        
+        def set_time(self, date):
+            self.timer.set_time(date)
 
         def update_database(self):
             for b in self.bikeways:
                 BikeWay.objects.update_or_create(name=b[0], description=b[1],
                                              defaults={'coordinates': b[2]})
+            self.set_time(datetime.datetime.now())
             print "database updated"
     
         def parse_data(self):
@@ -156,6 +160,7 @@ class BikeWayManager:
             print "no instance yet"
             BikeWayManager.instance = BikeWayManager.__BikeWayManager()
             BikeWayManager.instance.update_data()
+        print BikeWayManager.instance.get_time()
 
     def __getattr__(self, name):
         return getattr(self.instance, name)
@@ -173,38 +178,41 @@ class UpdateTimer:
         self.time = date
         print "thread started"
         thread = Thread(target=self.fetching)
+        thread.daemon = True
         thread.start()
     
-    def get_time(self, date):
+    def get_time(self):
         return self.time.strftime("%Y-%m-%d at %H:%M:%S")
 
     def set_time(self, date):
         self.time = date
+        print self.time.strftime("%Y-%m-%d at %H:%M:%S")
 
     def fetching(self):
         parsed = False
         SECONDS_IN_DAY = 86400
         while True:
-            self.time = datetime.datetime.now()
+            current_time = datetime.datetime.now()
             target_time = datetime.time(6,0)
-            target_date = datetime.datetime.combine(self.time, target_time)
-            time_difference = (self.time - target_date).total_seconds()
+            target_date = datetime.datetime.combine(current_time, target_time)
+            time_difference = (current_time - target_date).total_seconds()
             if abs(time_difference) < 5:
                 print "we've reached 6 o'clock"
                 if not parsed:
                     print "it's 6 o'clock - time to parse"
                     self.manager.update_data()
+                    manager.set_time(current_time)
                     parsed = True
                     time.sleep(SECONDS_IN_DAY)
             else:
                 print "it's not 6 o'clock"
                 parsed = False
-                if (self.time < target_date):
-                    to_sleep = (target_date - self.time).total_seconds()
+                if (current_time < target_date):
+                    to_sleep = (target_date - current_time).total_seconds()
                     print str(to_sleep)
                     time.sleep(to_sleep)
 
                 else:
-                    to_sleep = SECONDS_IN_DAY - (self.time - target_date).total_seconds()
+                    to_sleep = SECONDS_IN_DAY - (current_time - target_date).total_seconds()
                     print str(to_sleep)
                     time.sleep(to_sleep)
