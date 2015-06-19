@@ -102,7 +102,7 @@
                 <input type="text" placeholder="Location"> <br/>
                 <p class="instructions"> Enter your destination: </p>
                 <input type="text" placeholder="location"> <br/>
-                <input class="submitBtn" type="button" value="submit"> </input>
+                <input class="submitBtn" type="button" value="Submit"> </input>
             </form>
             All Markers On Map:
             <table id="markerTable">
@@ -112,6 +112,10 @@
             {% endif %}
             <br/>
             	Last updated: {{ updateTime|safe }}
+            <br/>
+            <form action="#" method="get">
+                <input class="submitBtn" type="button" value="Update Database" name="update"> </input>
+            </form>
             
         </div>
         <div id="googleMap">

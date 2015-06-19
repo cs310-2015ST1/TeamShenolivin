@@ -135,8 +135,6 @@ def user_login(request):
         # No context variables to pass to the template system, hence the
         # blank dictionary object...
         return render(request, 'RoutePlanner/login.html', {})
-    
-    
 
 def user_logout(request):
     # Since we know the user is logged in, we can now just log them out.
@@ -146,5 +144,11 @@ def user_logout(request):
     return HttpResponseRedirect('/RoutePlanner/')
 
 def about(request):
-    
     return render(request, 'RoutePlanner/about.html', {})
+
+def request_page(request):
+    print "request initiated"
+    if (request.GET.get('update')):
+        BikewayManager.update_data()
+        print "data manually updated"
+    return render_to_response('RoutePlanner/index.html')
