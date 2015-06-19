@@ -11,7 +11,7 @@ def index(request):
     print "manager to be initialized"
     manager = BikeWayManager()
     allBikeWays = list(manager.bikeways)
-    updateTime = manager.get_time()
+    updateTime = manager.instance.get_time()
     print updateTime
     bikeWayCoords = []
     # put all the bikeway segments into one list
