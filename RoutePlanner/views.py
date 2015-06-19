@@ -8,23 +8,17 @@ def index(request):
 
     # Construct a dictionary to pass to the template engine as its context.
     # Note the key boldmessage is the same as {{ boldmessage }} in the template!
+    print "manager to be initialized"
     manager = BikeWayManager()
     allBikeWays = list(manager.bikeways)
     bikeWayCoords = []
     # put all the bikeway segments into one list
-    # print allBikeWays[0]
     for b in allBikeWays:
         
         coordList = b[2]
-        #print coordListString
          
         bikeWayCoords+=coordList # dirty fix- revisit this later
-        
-    # print allBikeWays[121]
     
-    # print bikeWayCoords[0]
-
-    # print bikeWayCoords[0]    
     context_dict = {'allBikeWays': bikeWayCoords}
 
     # Return a rendered response to send to the client.

@@ -4,6 +4,8 @@ from pykml import parser
 from zipfile import ZipFile
 from threading import Thread
 import urllib, datetime, time, signal, threading
+import eventlet
+from eventlet.timeout import Timeout
 
 # Create your models here.
 
@@ -71,7 +73,6 @@ class KMLParser:
             coordPairList = coordPair.split(',')
             segmentCoords.append([float(coordPairList[1]),float(coordPairList[0])])
 
-        
         return segmentCoords
 
 
@@ -94,105 +95,74 @@ class BikeWay(models.Model):
     def __unicode__(self):
         return self.name
 
-    # def __init__(self, name, description, coordinates):
-    #     self.name = name
-    #     self.description = description
-    #     self.coordinates = coordinates
-
-    # def add_point(self, point):
-    #     self.points.append(point)
-    #
-    # def remove_point(self, point):
-    #     self.points.remove(point)
-    #
-    # def find_point(self, point):
-    #     return self.points.__contains__(point)
-    #
-    # def get_points(self):
-    #     return self.points
-
-#allBikeWays = BikeWay.objects.all()
 
 # manages when the bikeway data is parsed
 class BikeWayManager:
-    def __init__(self):
-        self.bikeways = []
-        self.timer = UpdateTimer(self, datetime.datetime.now())
-        self.update_data()
+    class __BikeWayManager:
+        def __init__(self):
+            self.bikeways = []
+            print "make timer"
+            self.timer = UpdateTimer(self, datetime.datetime.now())
+    
+        def __str__(self):
+            return 'self'
 
-    def signal_handler(self, signum, frame):
-        raise Exception("Timed out!")
-
-    def do_something(self):
-        print "exception thrown"
-
-    def update_database(self):
-        for b in self.bikeways:
-            BikeWay.objects.update_or_create(name=b[0], description=b[1],
+        def update_database(self):
+            for b in self.bikeways:
+                BikeWay.objects.update_or_create(name=b[0], description=b[1],
                                              defaults={'coordinates': b[2]})
-        #print self.bikeways[1]
-
-    def parse_data(self):
-        temp_bikeways = []
-        placemarks = self.parser.get_all_placemarks()
-        for i in range(0, len(placemarks)):
-            name = self.parser.get_name_string_by_placemark_index(i)
-            description = self.parser.get_description_by_placemark_index(i)
-            linestrings = self.parser.get_line_strings_by_placemark_index(i)
-            coordinates = []
-
-            for j in range(0, len(linestrings)):
-                coordinates.append(self.parser.get_coordinates_by_indices(i, j))
-
-            bikeway = (name, description, coordinates)
-            temp_bikeways.append(bikeway)
+            print "database updated"
+    
+        def parse_data(self):
+            temp_bikeways = []
+            placemarks = self.parser.get_all_placemarks()
+            for i in range(0, len(placemarks)):
+                name = self.parser.get_name_string_by_placemark_index(i)
+                description = self.parser.get_description_by_placemark_index(i)
+                linestrings = self.parser.get_line_strings_by_placemark_index(i)
+                coordinates = []
             
+                for j in range(0, len(linestrings)):
+                    coordinates.append(self.parser.get_coordinates_by_indices(i, j))
+            
+                bikeway = (name, description, coordinates)
+                temp_bikeways.append(bikeway)
         
-        self.bikeways = temp_bikeways
+            return temp_bikeways
+    
+        def update_data(self):
+            print "updating data"
+            timeout = Timeout(10)
+            try:
+                self.parser = KMLParser()
+                temp = self.parse_data()
+                timeout.cancel()
+                self.bikeways = temp
+                self.update_database()
+            except:
+                print "couldn't get data"
 
+    print "instance set to None"
+    instance = None
+    
+    def __init__(self):
+        print "init called"
+        if BikeWayManager.instance is None:
+            print "no instance yet"
+            BikeWayManager.instance = BikeWayManager.__BikeWayManager()
 
-    def update_data(self):
-        # self.timer.setTimer(datetime.datetime.now())
-        # signal.signal(signal.SIGALRM, self.signal_handler)
-        # signal.alarm(10)
-        try:
-            self.parser = KMLParser()
-            self.parse_data()
-            # signal.alarm(0)
-        except Exception, msg:
-            self.do_something()
-        finally:
-            self.update_database()
+    def __getattr__(self, name):
+        return getattr(self.instance, name)
 
-
-    # def add_route(self, route):
-    #     self.routes.append(route)
-    #
-    # def remove_route(self, route):
-    #     self.routes.remove(route)
-    #
-    # def clear_routes(self):
-    #     self.routes = []
-    #
-    # def find_route(self, route):
-    #     return self.routes.__contains__(route)
-    #
-    # def update_data(self):
-    #     self.clear_routes()
-    #     data = self.parser.parse_data()
-    #     for route in data:
-    #         self.add_route(route)
-    #     self.date = datetime.datetime.now()
-    #
-    # def get_points(self):
-    #     for route in self.routes:
-    #         route.getPoints()
+    def __setattr__(self, name):
+        return setattr(self.instance, name)
 
 
 class UpdateTimer:
     def __init__(self, manager, date):
         self.manager = manager
         self.time = date
+        print "thread started"
         thread = Thread(target=self.fetching)
         thread.start()
 
@@ -202,20 +172,27 @@ class UpdateTimer:
     def fetching(self):
         parsed = False
         SECONDS_IN_DAY = 86400
-        # print threading.currentThread()
-        # while True:
-        #     current_time = datetime.datetime.
-        #     if current_time.hour == 6 and current_time.minute == 0:
-        #         if not parsed:
-        #             current_time = time.time()
-        #             self.manager.update_data()
-        #             parsed = True
-        #             wait = time.time() - current_time
-        #             time.sleep(SECONDS_IN_DAY - wait)
-        #     else:
-        #         parsed = False
-        #         # if current_hour < 6:
-        #         #
+        while True:
+            current_date = datetime.datetime.now()
+            target_time = datetime.time(6,0)
+            target_date = datetime.datetime.combine(current_date, target_time)
+            print str(abs(current_date - target_date).total_seconds())
+            if abs(current_date - target_date).total_seconds() < 10:
+                print "we've reached 6 o'clock"
+                if not parsed:
+                    print "it's 6 o'clock - time to parse"
+                    self.manager.update_data()
+                    parsed = True
+                    time.sleep(SECONDS_IN_DAY)
+            else:
+                print "it's not 6 o'clock"
+                parsed = False
+                if (current_date < target_date):
+                    to_sleep = (target_date - current_date).total_seconds()
+                    print str(to_sleep)
+                    time.sleep(to_sleep)
 
-    def on_time_out(self):
-        raise Exception()
+                else:
+                    to_sleep = SECONDS_IN_DAY - (target_date - current_date).total_seconds()
+                    print str(to_sleep)
+                    time.sleep(to_sleep)
