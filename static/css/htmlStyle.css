@@ -55,6 +55,13 @@ h1 {
     width: 30%;
     height: 800px;
     float: left;
+    display: none;
+}
+
+#extraData {
+    width: 30%;
+    height: 800px;
+    float: left;	
 }
 
 a {

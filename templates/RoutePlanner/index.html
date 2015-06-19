@@ -81,7 +81,7 @@
             	<a href="/RoutePlanner/about.html"> <li> About </li></a>                     
                 {% if user.is_authenticated %}
 		        <a href="/RoutePlanner/logout.html"> <li>Log Out</li></a> 
-		        <a href="/RoutePlanner/account.html"> <li>My Account</li></a> 
+<!-- 		        <a href="/RoutePlanner/account.html"> <li>My Account</li></a>  -->
 		        {% else %}
 		        <a href="/RoutePlanner/login.html"><li>Log In</li></a> 
 		        <a href="/RoutePlanner/register.html"><li>Get Started</li></a> 
@@ -104,6 +104,8 @@
                 <input type="text" placeholder="location"> <br/>
                 <input class="submitBtn" type="button" value="Submit"> </input>
             </form>
+       </div>
+       <div id = "extraData">
             All Markers On Map:
             <table id="markerTable">
             </table>
@@ -113,9 +115,11 @@
             <br/>
             	Last updated: {{ updateTime|safe }}
             <br/>
+            {% if user.is_superuser %}
             <form action="#" method="get">
                 <input class="submitBtn" type="submit" value="Update Database" name="update"> </input>
             </form>
+            {% endif %}
             
         </div>
         <div id="googleMap">
