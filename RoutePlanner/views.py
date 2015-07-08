@@ -2,20 +2,23 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from RoutePlanner.forms import UserForm
-from RoutePlanner.models import UserProfile, BikeWay, BikeWayManager
+from RoutePlanner.models import UserProfile, BikeWay, BikeWayManager, RouteManager
 
 def index(request):
 
     # Construct a dictionary to pass to the template engine as its context.
     # Note the key boldmessage is the same as {{ boldmessage }} in the template!
-    print "manager to be initialized"
-    manager = BikeWayManager()
-    allBikeWays = list(manager.bikeways)
+    print "bikeway manager to be initialized"
+    bikeway_manager = BikeWayManager()
+    allBikeWays = list(bikeway_manager.bikeways)
+    
+    print "route manager to be initialized"
+    route_manager = RouteManager()
     
     if (request.GET.get('update')):
-        manager.update_data()
+        bikeway_manager.update_data()
     
-    updateTime = manager.instance.get_time()
+    updateTime = bikeway_manager.instance.get_time()
     print updateTime
     bikeWayCoords = []
     # put all the bikeway segments into one list
@@ -149,4 +152,3 @@ def user_logout(request):
 
 def about(request):
     return render(request, 'RoutePlanner/about.html', {})
-

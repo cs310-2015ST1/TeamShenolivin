@@ -107,7 +107,7 @@ class BikeWayManager:
             self.timer = UpdateTimer(self, datetime.datetime.now())
     
         def __str__(self):
-            return 'self'
+            return "BikeWayManager self"
         
         def get_time(self):
             return self.timer.get_time()
@@ -151,13 +151,13 @@ class BikeWayManager:
             except:
                 print "couldn't get data"
 
-    print "instance set to None"
+    print "BikeWay manager instance set to None"
     instance = None
     
     def __init__(self):
-        print "init called"
+        print "BWM init called"
         if BikeWayManager.instance is None:
-            print "no instance yet"
+            print "no BWM instance yet"
             BikeWayManager.instance = BikeWayManager.__BikeWayManager()
             BikeWayManager.instance.update_data()
         print BikeWayManager.instance.get_time()
@@ -172,6 +172,49 @@ class BikeWayManager:
         return BikeWayManager.instance.get_time()
 
 
+# stores all the bikeways in the database
+class Route(models.Model):
+    name = models.CharField(max_length=100)
+    coordinates = models.TextField()
+    
+    def __unicode__(self):
+        return self.name
+
+
+# singleton pattern adapted from:
+# http://python-3-patterns-idioms-test.readthedocs.org/en/latest/Singleton.html
+# manages when the bikeway data is parsed
+class RouteManager:
+    class __RouteManager:
+        def __init__(self):
+            self.cached_routes = []
+        
+        def __str__(self):
+            return "RouteManager self"
+    
+        def add_route(self, route):
+            if cached_routes.len() > 20:
+                self.cached_routes.pop(0)
+            self.cached_routes.append(route)
+
+        def remove_route(self, route):
+            self.cached_routes.remove(route)
+                
+        def reset_routes(self):
+            self.cached_routes = []
+    
+        # methods go here
+    
+    print "RouteManager instance set to None"
+    instance = None
+    
+    def __init__(self):
+        print "RM init called"
+        if RouteManager.instance is None:
+            print "no RM instance yet"
+            RouteManager.instance = RouteManager.__RouteManager()
+
+
 class UpdateTimer:
     def __init__(self, manager, date):
         self.manager = manager
@@ -182,37 +225,37 @@ class UpdateTimer:
         thread.start()
     
     def get_time(self):
-        return self.time.strftime("%Y-%m-%d at %H:%M:%S")
+        return self.time.strftime("%Y-%m-%d at %H:%M:%S UTC")
 
     def set_time(self, date):
         self.time = date
-        print self.time.strftime("%Y-%m-%d at %H:%M:%S")
+        print self.time.strftime("%Y-%m-%d at %H:%M:%S UTC")
 
     def fetching(self):
         parsed = False
         SECONDS_IN_DAY = 86400
         while True:
-            current_time = datetime.datetime.now()
+            current_date = datetime.datetime.now()
             target_time = datetime.time(6,0)
-            target_date = datetime.datetime.combine(current_time, target_time)
-            time_difference = (current_time - target_date).total_seconds()
+            target_date = datetime.datetime.combine(current_date, target_time)
+            time_difference = (current_date - target_date).total_seconds()
             if abs(time_difference) < 5:
                 print "we've reached 6 o'clock"
                 if not parsed:
                     print "it's 6 o'clock - time to parse"
                     self.manager.update_data()
-                    manager.set_time(current_time)
+                    manager.set_time(current_date)
                     parsed = True
                     time.sleep(SECONDS_IN_DAY)
             else:
                 print "it's not 6 o'clock"
                 parsed = False
-                if (current_time < target_date):
-                    to_sleep = (target_date - current_time).total_seconds()
+                if (current_date < target_date):
+                    to_sleep = (target_date - current_date).total_seconds()
                     print str(to_sleep)
                     time.sleep(to_sleep)
 
                 else:
-                    to_sleep = SECONDS_IN_DAY - (current_time - target_date).total_seconds()
+                    to_sleep = SECONDS_IN_DAY - (current_date - target_date).total_seconds()
                     print str(to_sleep)
                     time.sleep(to_sleep)
