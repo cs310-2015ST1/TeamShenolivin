@@ -79,7 +79,6 @@ class KMLParser:
 # contains all user data
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
-    
     searchLocations = []
     
     def __unicode__(self):

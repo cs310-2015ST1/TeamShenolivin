@@ -40,7 +40,7 @@ def index(request):
 TEMPLATE_DIRS = ('<workspace>/MegaByke/',)
 
 
-# register page taken from http://www.tangowithdjango.com/
+# register page taken and modified from http://www.tangowithdjango.com/
 def register(request):
 
     # A boolean value for telling the template whether the registration was successful.
@@ -68,13 +68,7 @@ def register(request):
             # Since we need to set the user attribute ourselves, we set commit=False.
             # This delays saving the model until we're ready to avoid integrity problems.
             profile = UserProfile()
-            # profile = profile_form.save(commit=False)
             profile.user = user
-
-            # Did the user provide a profile picture?
-            # If so, we need to get it from the input form and put it in the UserProfile model.
-            #if 'picture' in request.FILES:
-            #    profile.picture = request.FILES['picture']
 
             # Now we save the UserProfile model instance.
             profile.save()
@@ -86,31 +80,29 @@ def register(request):
         # Print problems to the terminal.
         # They'll also be shown to the user.
         else:
-            print user_form.errors#, profile_form.errors
+            print user_form.errors
 
     # Not a HTTP POST, so we render our form using two ModelForm instances.
     # These forms will be blank, ready for user input.
     else:
         user_form = UserForm()
-        #profile_form = UserProfileForm()
 
     # Render the template depending on the context.
     return render(request,
             'RoutePlanner/register.html',
             {'user_form': user_form, 'registered': registered} )
-            #{'user_form': user_form, 'profile_form': profile_form, 'registered': registered} )
     
     
-# login page taken from http://www.tangowithdjango.com/    
+# login page taken and modified from http://www.tangowithdjango.com/    
 def user_login(request):
 
     # If the request is a HTTP POST, try to pull out the relevant information.
     if request.method == 'POST':
         # Gather the username and password provided by the user.
         # This information is obtained from the login form.
-                # We use request.POST.get('<variable>') as opposed to request.POST['<variable>'],
-                # because the request.POST.get('<variable>') returns None, if the value does not exist,
-                # while the request.POST['<variable>'] will raise key error exception
+        # We use request.POST.get('<variable>') as opposed to request.POST['<variable>'],
+        # because the request.POST.get('<variable>') returns None, if the value does not exist,
+        # while the request.POST['<variable>'] will raise key error exception
         username = request.POST.get('username')
         password = request.POST.get('password')
 
