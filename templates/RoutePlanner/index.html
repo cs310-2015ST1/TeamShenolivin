@@ -5,30 +5,31 @@
 
     <head>
         <title>MegaByke Route Planner</title>
-        <script src="http://maps.googleapis.com/maps/api/js"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="{%  static "js/bikeWayPlotter.js" %}"></script>
         <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans" />
         <link rel="stylesheet" type="text/css" href="{% static "css/htmlStyle.css" %}" />
         <input type="hidden" id="dallBikeWays" name="variable" value="{{ allBikeWays }}">
+        <script type="text/javascript"
+	      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA0A3v4kMlYeB0ETKBdqKXxawl4iLEeYvQ&libraries=places">
+	    </script>
+        
         <script type="text/javascript">
             var loggedIn = false;
             var times = 0;
-
-            function hideAccountPage() {
-{#                document.getElementById("accountLi").style.visibility = "hidden";#}
-{#                document.getElementById('additionalLi').style.visibility = 'hidden';#}
-            }
+            
+            
+            
 
             function initialize() {
+            
+              // map setup
               var mapProp = {
                 center:new google.maps.LatLng(49.2827,-123.1207),
                 zoom:12,
                 mapTypeId:google.maps.MapTypeId.ROADMAP
               };
               var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
-{#              if (!loggedIn)#}
-{#                hideAccountPage();#}
 
 
               var allBikeWays = {{ allBikeWays }};
@@ -39,16 +40,66 @@
                   plotBikeWay(allBikeWays[i], map);
                   console.log("in index for loop");
               }
-{#              plotBikeWay(map);#}
-              console.log("after plotLines");
-
-
-{#                var allBikeWays = [[[49.2327,-123.1207], [49.2827,-123.1907], [49.2227,-123.1207]],#}
-{#                    [[49.3827,-123.1207], [49.1827,-123.1207]]];#}
-                //var allBikeWays = [[49.2327,-123.1207], [49.2827,-123.1907], [49.2227,-123.1207]];
-                //TODO: iterate over all bikeWays, current method plots one successfully
+              
+              // setting up the search boxes
+              var markers = [];
+              var input = /** @type {HTMLInputElement} */(document.getElementById('pac-input'));
+ 			  map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+ 			  
+ 			  var searchBox = new google.maps.places.SearchBox(/** @type {HTMLInputElement} */(input));
+ 			  
+ 			  google.maps.event.addListener(searchBox, 'places_changed', function() {
+			    var places = searchBox.getPlaces();
+			
+			    if (places.length == 0) {
+			      return;
+			    }
+			    for (var i = 0, marker; marker = markers[i]; i++) {
+			      marker.setMap(null);
+			    }
+			
+			    // For each place, get the icon, place name, and location.
+			    markers = [];
+			    var bounds = new google.maps.LatLngBounds();
+			    for (var i = 0, place; place = places[i]; i++) {
+			      var image = {
+			        url: place.icon,
+			        size: new google.maps.Size(71, 71),
+			        origin: new google.maps.Point(0, 0),
+			        anchor: new google.maps.Point(17, 34),
+			        scaledSize: new google.maps.Size(25, 25)
+			      };
+			
+			      // Create a marker for each place.
+			      var marker = new google.maps.Marker({
+			        map: map,
+			        icon: image,
+			        title: place.name,
+			        position: place.geometry.location
+			      });
+			
+			      markers.push(marker);
+			
+			      bounds.extend(place.geometry.location);
+			    }
+			
+			    map.fitBounds(bounds);
+			  });
+			  // [END region_getplaces]
+			
+			  // Bias the SearchBox results towards places that are within the bounds of the
+			  // current map's viewport.
+			  google.maps.event.addListener(map, 'bounds_changed', function() {
+			    var bounds = map.getBounds();
+			    searchBox.setBounds(bounds);
+			  });
+			  
+ 			  
+ 			  
+              
 
             }
+            
             google.maps.event.addDomListener(window, 'load', initialize);
 
             $(document).ready(function() {
@@ -62,17 +113,9 @@
                 });
             });
 
-
         </script>
-        <style>
 
-
-       /*     #accountLi {
-                visibility: hidden;
-            }*/
-        </style>
     </head>
-
     <body>
     <nav>
         <div id='navBar'>
@@ -120,6 +163,7 @@
             {% endif %}
             
         </div>
+        <input id="pac-input" class="controls" type="text" placeholder="Search Box">
         <div id="googleMap">
         </div>
         
