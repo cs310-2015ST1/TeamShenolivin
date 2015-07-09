@@ -61,7 +61,20 @@
                     times ++;
                 });
             });
-
+            
+            function resetClicked(e) {
+                if (confirm('Are you sure you want to remove all markers from the map?'))
+                    removeAllMarkers();
+                else {
+                    e.preventDefault();
+                    console.log("cancelled deleting markers");
+                }
+                    
+            }
+        
+            function removeAllMarkers() {
+                console.log("removing all markers");
+            }
 
         </script>
         <style>
@@ -119,7 +132,7 @@
             </form>
             {% endif %}
             <form>
-                <input class="submitBtn" type="button" value="Reset Markers" onclick="return confirm('Are you sure you want to remove all markers from the map?')"> </input>
+                <input class="submitBtn" type="button" value="Reset Markers" onclick="resetClicked(event)"> </input>
             </form>
         </div>
         <div id="googleMap">
