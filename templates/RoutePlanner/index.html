@@ -114,6 +114,9 @@
         
             function removeAllMarkers() {
                 console.log("removing all markers");
+                for (var i = 0, marker; marker = markers[i]; i++) {
+                    marker.setMap(null);
+                }
             }
 
         </script>
