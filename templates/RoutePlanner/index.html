@@ -118,7 +118,9 @@
                 <input class="submitBtn" type="submit" value="Update Database" name="update"> </input>
             </form>
             {% endif %}
-            
+            <form>
+                <input class="submitBtn" type="button" value="Reset Markers" onclick="return confirm('Are you sure you want to remove all markers from the map?')"> </input>
+            </form>
         </div>
         <div id="googleMap">
         </div>
