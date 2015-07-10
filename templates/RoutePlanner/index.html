@@ -194,17 +194,23 @@
             }
             
             google.maps.event.addDomListener(window, 'load', initialize);
-
-            $(document).ready(function() {
-                var sub = $('.submitBtn');
-                sub.click(function() {
-                    // alert("Okay this should be fine if you see this.");
-                    document.getElementById('accountLi').style.visibility = 'visible';
-                    if (times >= 1)
-                        document.getElementById('additionalLi').style.visibility = 'visible';
-                    times ++;
-                });
-            });
+            
+            function resetClicked(e) {
+                if (confirm('Are you sure you want to remove all markers from the map?'))
+                    removeAllMarkers();
+                else {
+                    e.preventDefault();
+                    console.log("cancelled deleting markers");
+                }
+                    
+            }
+        
+            function removeAllMarkers() {
+                console.log("removing all markers");
+                for (var i = 0, marker; marker = markers[i]; i++) {
+                    marker.setMap(null);
+                }
+            }
 
         </script>
 
@@ -259,7 +265,7 @@
                 <input class="submitBtn" type="submit" value="Update Database" name="update"> </input>
             </form>
             {% endif %}
-            
+            <button class="submitBtn" onclick="resetClicked(event)">Reset Markers</button>
         </div>
         
         <div id="googleMap">
