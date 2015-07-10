@@ -10,7 +10,7 @@
         <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans" />
         <link rel="stylesheet" type="text/css" href="{% static "css/htmlStyle.css" %}" />
         <input type="hidden" id="dallBikeWays" name="variable" value="{{ allBikeWays }}">
-        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA0A3v4kMlYeB0ETKBdqKXxawl4iLEeYvQ&libraries=places">
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places">
 	    </script>
         
         <script type="text/javascript">
@@ -88,9 +88,11 @@
     			      };
     			
     			      // Create a marker for each place.
+                      var iconBase = '';
     			      var marker = new google.maps.Marker({
     			        map: map,
-    			        icon: image,
+    			        //icon: image,
+                        icon: 'http://maps.google.com/mapfiles/marker.png',
     			        title: place.name,
     			        position: place.geometry.location
     			      });
@@ -108,7 +110,11 @@
                 // current map's viewport.
                 google.maps.event.addListener(map, 'bounds_changed', function() {
                     var bounds = map.getBounds();
-                    searchBox.setBounds(bounds);
+                    searchBox1.setBounds(bounds);
+                    searchBox2.setBounds(bounds);
+                    searchBox3.setBounds(bounds);
+                    searchBox4.setBounds(bounds);
+                    searchBox5.setBounds(bounds);
                 });
 			  
 
