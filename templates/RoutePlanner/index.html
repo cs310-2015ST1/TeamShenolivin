@@ -63,8 +63,8 @@
                     };
 
                     // create the listener for when the text box is updated
-                    google.maps.event.addListener(inputLocations[i].searchBox, 'place_changed', function() { 
-
+                    google.maps.event.addListener(inputLocations[i].searchBox, 'place_changed', function() {
+                    
                     for(var i = 0; i < inputLocations.length; i++) {
                         console.log("Executing input change callback");
                         var place = inputLocations[i].searchBox.getPlace();
@@ -210,7 +210,8 @@
         
             function deleteMarker(number) {
                 console.log("removing marker # " + number.toString());
-                markers[number].setMap(null);
+                inputLocations[number-1].marker.setMap(null);
+                document.getElementById("locationInput"+number.toString()).value = "";
             }
         
             function resetClicked(e) {
@@ -267,16 +268,16 @@
        <div id = "extraData">
             Locations:
             <table id="markerTable"><br/>
-            <input id="locationInput1" class="controls" type="text" placeholder="Location 1">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Red_x.svg" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 1);"><br/>
-            <input id="locationInput2" class="controls" type="text" placeholder="Location 2">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Red_x.svg" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 2);"><br/>
-            <input id="locationInput3" class="controls" type="text" placeholder="Location 3">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Red_x.svg" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 3);"><br/>
-            <input id="locationInput4" class="controls" type="text" placeholder="Location 4">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Red_x.svg" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 4);"><br/>
-            <input id="locationInput5" class="controls" type="text" placeholder="Location 5">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Red_x.svg" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 5);"><br/>
+            <tr><td><input id="locationInput1" class="controls" type="text" placeholder="Location 1"></td>
+                <td><img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Red_x.svg" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 1);"></td></tr>
+            <tr><td><input id="locationInput2" class="controls" type="text" placeholder="Location 2"></td>
+                <td><img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Red_x.svg" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 2);"></td></tr>
+            <tr><td><input id="locationInput3" class="controls" type="text" placeholder="Location 3"></td>
+                <td><img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Red_x.svg" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 3);"></td></tr>
+            <tr><td><input id="locationInput4" class="controls" type="text" placeholder="Location 4"></td>
+                <td><img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Red_x.svg" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 4);"></td></tr>
+            <tr><td><input id="locationInput5" class="controls" type="text" placeholder="Location 5"></td>
+                <td><img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Red_x.svg" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 5);"></td></tr>
             </table>
             {% if user.is_authenticated %}
             	Logged in as {{ user.username }}<br/>
