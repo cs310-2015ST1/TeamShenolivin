@@ -210,8 +210,9 @@
         
             function removeAllMarkers() {
                 console.log("removing all markers");
-                for (var i = 0, marker; marker = markers[i]; i++) {
-                    marker.setMap(null);
+                for (var i = 0, ip; ip = inputLocations[i]; i++) {
+                    ip.marker.setMap(null);
+                    document.getElementById("locationInput"+(i+1).toString()).value = "";
                 }
             }
 
@@ -268,7 +269,7 @@
                 <input class="submitBtn" type="submit" value="Update Database" name="update"> </input>
             </form>
             {% endif %}
-            <button class="submitBtn" onclick="resetClicked(event)">Reset Markers</button>
+            <button class="submitBtn" type="reset" onclick="resetClicked(event)">Reset Markers</button>
         </div>
         
         <div id="googleMap">
