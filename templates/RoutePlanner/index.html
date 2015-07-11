@@ -71,6 +71,7 @@
 
                         var bounds = new google.maps.LatLngBounds();
                         var invalidLocations = [];
+                        var numMarkers = 0;
 
                         for(var i = 0; i < inputLocations.length; i++) {
                             console.log("Executing input change callback");
@@ -101,7 +102,7 @@
                             });
 
                             inputLocations[i].marker.setVisible(true);
-
+                            numMarkers++;
                             bounds.extend(place.geometry.location);
                             
                         }
@@ -114,8 +115,13 @@
                             }
                             window.alert(errMsg);
                         }
-
-                        map.fitBounds(bounds);
+                                                  
+                        if (numMarkers != 0) {
+                            map.fitBounds(bounds);
+                        } else  {
+                            map.setCenter(new google.maps.LatLng(49.2827,-123.1207));
+                            map.setZoom(12);
+                        }
 
                     });
 
@@ -233,6 +239,7 @@
                 console.log("removing marker # " + number.toString());
                 inputLocations[number-1].marker.setMap(null);
                 document.getElementById("locationInput"+number.toString()).value = "";
+                inputLocations[number-1].searchBox.set('place',void(0));
             }
         
             function resetClicked(e) {
@@ -250,6 +257,7 @@
                 for (var i = 0, ip; ip = inputLocations[i]; i++) {
                     ip.marker.setMap(null);
                     document.getElementById("locationInput"+(i+1).toString()).value = "";
+                    ip.searchBox.set('place',void(0));
                 }
             }
 
