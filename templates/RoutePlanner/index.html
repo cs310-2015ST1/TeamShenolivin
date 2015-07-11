@@ -81,13 +81,13 @@
                             if (place == null) {
                                 if (i < 4) {
                                     document.getElementById("locationInput"+(i+2).toString()).disabled = true;
-                                    document.getElementById("locationInput"+(i+2).toString()).style.background-color='#CCCCCC';
+                                    document.getElementById("locationInput"+(i+2).toString()).style.backgroundColor = '#CCCCCC';
                                 }
                                 continue;
                             } else {
                                 if (i < 4)
                                     document.getElementById("locationInput"+(i+2).toString()).disabled = false;
-                                    document.getElementById("locationInput"+(i+2).toString()).style.background-color='#FFFFFF';
+                                    document.getElementById("locationInput"+(i+2).toString()).style.backgroundColor = '#FFFFFF';
                             }
                                                   
                             inputLocations[i].marker.setVisible(false);
