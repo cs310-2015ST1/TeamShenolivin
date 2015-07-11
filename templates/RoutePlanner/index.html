@@ -79,8 +79,17 @@
                             console.log(inputLocations[i].searchBox.getPlace());
                         
                             if (place == null) {
+                                if (i < 4) {
+                                    document.getElementById("locationInput"+(i+2).toString()).disabled = true;
+                                    document.getElementById("locationInput"+(i+2).toString()).style.background-color='#CCCCCC';
+                                }
                                 continue;
+                            } else {
+                                if (i < 4)
+                                    document.getElementById("locationInput"+(i+2).toString()).disabled = false;
+                                    document.getElementById("locationInput"+(i+2).toString()).style.background-color='#FFFFFF';
                             }
+                                                  
                             inputLocations[i].marker.setVisible(false);
                         
                             // Get the icon, place name, and location.
@@ -297,16 +306,16 @@
        <div id = "extraData">
             Locations:
             <table id="markerTable"><br/>
-            <tr><td><input id="locationInput1" class="controls" type="text" placeholder="Location 1"></td>
-                <td><img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Red_x.svg" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 1);"></td></tr>
-            <tr><td><input id="locationInput2" class="controls" type="text" placeholder="Location 2"></td>
-                <td><img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Red_x.svg" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 2);"></td></tr>
-            <tr><td><input id="locationInput3" class="controls" type="text" placeholder="Location 3"></td>
-                <td><img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Red_x.svg" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 3);"></td></tr>
-            <tr><td><input id="locationInput4" class="controls" type="text" placeholder="Location 4"></td>
-                <td><img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Red_x.svg" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 4);"></td></tr>
-            <tr><td><input id="locationInput5" class="controls" type="text" placeholder="Location 5"></td>
-                <td><img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Red_x.svg" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 5);"></td></tr>
+            <tr><td><input id="locationInput1" class="controls" type="text" style="background-color:#FFFFFF" placeholder="Location 1"></td>
+                <td><img src="{{ STATIC_URL }}images/redX.png" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 1);"></td></tr>
+            <tr><td><input id="locationInput2" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 2"></td>
+                <td><img src="{{ STATIC_URL }}images/redX.png" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 2);"></td></tr>
+            <tr><td><input id="locationInput3" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 3"></td>
+                <td><img src="{{ STATIC_URL }}images/redX.png" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 3);"></td></tr>
+            <tr><td><input id="locationInput4" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 4"></td>
+                <td><img src="{{ STATIC_URL }}images/redX.png" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 4);"></td></tr>
+            <tr><td><input id="locationInput5" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 5"></td>
+                <td><img src="{{ STATIC_URL }}images/redX.png" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 5);"></td></tr>
             </table>
             {% if user.is_authenticated %}
             	Logged in as {{ user.username }}<br/>
