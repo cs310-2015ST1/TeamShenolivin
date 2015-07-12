@@ -77,7 +77,7 @@
                             console.log("Executing input change callback");
                             var place = inputLocations[i].searchBox.getPlace();
                             console.log(inputLocations[i].searchBox.getPlace());
-                        
+                                                  
                             if (place == null) {
                                 if (i < 4) {
                                     document.getElementById("locationInput"+(i+2).toString()).disabled = true;
@@ -248,7 +248,15 @@
                 console.log("removing marker # " + number.toString());
                 inputLocations[number-1].marker.setMap(null);
                 document.getElementById("locationInput"+number.toString()).value = "";
-                inputLocations[number-1].searchBox.set('place',void(0));
+                shiftLocations(number-1);
+            }
+        
+            function shiftLocations(index) {
+                for (var j = index; j < inputLocations.length-1; j++) {
+                    inputLocations[j].searchBox.set('place', inputLocations[j+1].searchBox.getPlace());
+                    document.getElementById("locationInput"+(j+1).toString()).value = document.getElementById("locationInput"+(j+2).toString()).value;
+                }
+                inputLocations[inputLocations.length-1].searchBox.set('place', void(0));
             }
         
             function resetClicked(e) {
