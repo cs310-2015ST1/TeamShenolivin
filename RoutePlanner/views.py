@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from RoutePlanner.forms import UserForm
-from RoutePlanner.models import UserProfile, BikeWay, BikeWayManager, RouteManager
+from RoutePlanner.models import UserProfile, BikeWay, BikeWayManager, LocationManager
 
 def index(request):
 
@@ -13,7 +13,7 @@ def index(request):
     allBikeWays = list(bikeway_manager.bikeways)
     
     print "route manager to be initialized"
-    route_manager = RouteManager()
+    location_manager = LocationManager()
     
     if (request.GET.get('update')):
         bikeway_manager.update_data()
