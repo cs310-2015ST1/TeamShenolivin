@@ -64,7 +64,7 @@
 
                         // create the listener for when the text box is updated
                         google.maps.event.addListener(inputLocations[i].searchBox, 'place_changed', function() {
-
+                                                      
                             var bounds = new google.maps.LatLngBounds();
                             var invalidLocations = [];
                             var numMarkers = 0;
@@ -81,9 +81,10 @@
                                     }
                                     continue;
                                 } else {
-                                    if (i < 4)
+                                    if (i < 4) {
                                         document.getElementById("locationInput"+(i+2).toString()).disabled = false;
                                         document.getElementById("locationInput"+(i+2).toString()).style.backgroundColor = '#FFFFFF';
+                                    }
                                 }
                                                   
                             inputLocations[i].marker.setVisible(false);
@@ -162,6 +163,7 @@
                     document.getElementById("locationInput"+(j+1).toString()).value = document.getElementById("locationInput"+(j+2).toString()).value;
                 }
                 inputLocations[inputLocations.length-1].searchBox.set('place', void(0));
+                document.getElementById("locationInput"+inputLocations.length.toString()).value = "";
             }
             
             function resetClicked(e) {
