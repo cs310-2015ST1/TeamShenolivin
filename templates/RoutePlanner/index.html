@@ -59,6 +59,8 @@
                     
                         console.log(inputLocations[i].markerIcon);
                         inputLocations[i].marker.setVisible(false);
+                        
+                        document.getElementById("locationInput"+(i+1).toString()).value = "";
 
                         // create the listener for when the text box is updated
                         google.maps.event.addListener(inputLocations[i].searchBox, 'place_changed', function() {
