@@ -30,9 +30,6 @@
                     var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
                     
                     var allBikeWays = {{ allBikeWays }};
-                    console.log(allBikeWays[0]);
-                    console.log("under defined var");
-                    console.log("above for loop");
                     for (var i = 0; i < allBikeWays.length; i++) {
                         plotBikeWay(allBikeWays[i], map);
                     }
@@ -196,6 +193,58 @@
             
             </head>
     <body>
+
+    <nav>
+        <div id='navBar'>
+            <ul>
+            	<a href="/RoutePlanner/"> <li>Home </li></a> 
+            	<a href="/RoutePlanner/about.html"> <li> About </li></a>                     
+                {% if user.is_authenticated %}
+		        <a href="/RoutePlanner/logout.html"> <li>Log Out</li></a> 
+		        <a href="/RoutePlanner/account.html"> <li>My Account</li></a> 
+		        {% else %}
+		        <a href="/RoutePlanner/login.html"><li>Log In</li></a> 
+		        <a href="/RoutePlanner/register.html"><li>Get Started</li></a> 
+		        {% endif %}
+                
+            </ul>
+        </div>
+    </nav>
+        <div id='title'>
+            <h1> Route Planner </h1>
+        </div>
+        <div id="infoInput">
+        </div>
+        <div id = "extraData">
+            Locations:
+            <table id="markerTable"><br/>
+                <tr><td><input id="locationInput1" class="controls" type="text" style="background-color:#FFFFFF" placeholder="Location 1"></td>
+                    <td><img src="{{ STATIC_URL }}images/redX.png" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 1);"></td></tr>
+                <tr><td><input id="locationInput2" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 2"></td>
+                    <td><img src="{{ STATIC_URL }}images/redX.png" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 2);"></td></tr>
+                <tr><td><input id="locationInput3" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 3"></td>
+                    <td><img src="{{ STATIC_URL }}images/redX.png" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 3);"></td></tr>
+                <tr><td><input id="locationInput4" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 4"></td>
+                    <td><img src="{{ STATIC_URL }}images/redX.png" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 4);"></td></tr>
+                <tr><td><input id="locationInput5" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 5"></td>
+                    <td><img src="{{ STATIC_URL }}images/redX.png" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 5);"></td></tr>
+            </table>
+            {% if user.is_authenticated %}
+            Logged in as {{ user.username }}<br/>
+            {% endif %}
+            <br/>
+            Last updated: {{ updateTime|safe }}
+            <br/>
+            {% if user.is_superuser %}
+            <form action="#" method="get">
+                <input class="submitBtn" type="submit" value="Update Database" name="update"> </input>
+            </form>
+            {% endif %}
+            <button class="submitBtn" type="reset" onclick="resetClicked(event)">Reset Markers</button>
+        </div>
+        <div id="googleMap">
+        </div>
+
     <div id="fb-root"></div>
     <script>
     window.fbAsyncInit = function() {
@@ -226,8 +275,6 @@
             // DO SOMETHING WITH THE DATAURL
             // Eg. write it to the page
 
-}
-
     $(document).ready(function(){
     $('#share_button').click(function(e){
     e.preventDefault();
@@ -257,57 +304,6 @@
       data-show-faces="true">
     </div>
 
-    <nav>
-        <div id='navBar'>
-            <ul>
-            	<a href="/RoutePlanner/"> <li>Home </li></a> 
-            	<a href="/RoutePlanner/about.html"> <li> About </li></a>                     
-                {% if user.is_authenticated %}
-		        <a href="/RoutePlanner/logout.html"> <li>Log Out</li></a> 
-		        <a href="/RoutePlanner/account.html"> <li>My Account</li></a> 
-		        {% else %}
-		        <a href="/RoutePlanner/login.html"><li>Log In</li></a> 
-		        <a href="/RoutePlanner/register.html"><li>Get Started</li></a> 
-		        {% endif %}
-                
-            </ul>
-        </div>
-    </nav>
-        <div id='title'>
-            <h1> Route Planner </h1>
-        </div>
-        <div id="infoInput">
-        </div>
-        <div id = "extraData">
-            Locations:
-            <table id="markerTable"><br/>
-                <tr><td><input id="locationInput1" class="controls" type="text" style="background-color:#FFFFFF" placeholder="Location 1"></td>
-                    <td><img src="{{ STATIC_URL }}images/redX.png" id="delete1" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 1);" ></td></tr>
-                <tr><td><input id="locationInput2" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 2"></td>
-                    <td><img src="{{ STATIC_URL }}images/redX.png" id="delete2" alt="Delete marker" height="30" width="30" disabled="true" onclick="deleteClicked(event, 2);"></td></tr>
-                <tr><td><input id="locationInput3" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 3"></td>
-                    <td><img src="{{ STATIC_URL }}images/redX.png" id="delete3" alt="Delete marker" height="30" width="30" disabled="true" onclick="deleteClicked(event, 3);"></td></tr>
-                <tr><td><input id="locationInput4" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 4"></td>
-                    <td><img src="{{ STATIC_URL }}images/redX.png" id="delete4" alt="Delete marker" height="30" width="30" disabled="true" onclick="deleteClicked(event, 4);"></td></tr>
-                <tr><td><input id="locationInput5" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 5"></td>
-                    <td><img src="{{ STATIC_URL }}images/redX.png" id="delete5" alt="Delete marker" height="30" width="30" disabled="true" onclick="deleteClicked(event, 5);"></td></tr>
-            </table>
-            {% if user.is_authenticated %}
-            Logged in as {{ user.username }}<br/>
-            {% endif %}
-            <br/>
-            Last updated: {{ updateTime|safe }}
-            <br/>
-            {% if user.is_superuser %}
-            <form action="#" method="get">
-                <input class="submitBtn" type="submit" value="Update Database" name="update"> </input>
-            </form>
-            {% endif %}
-            <button class="submitBtn" type="reset" onclick="resetClicked(event)">Reset Markers</button>
-        </div>
-        <div id="googleMap">
-        </div>
-        
     </body>
     
 </html>
