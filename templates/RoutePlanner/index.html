@@ -219,15 +219,15 @@
             Locations:
             <table id="markerTable"><br/>
                 <tr><td><input id="locationInput1" class="controls" type="text" style="background-color:#FFFFFF" placeholder="Location 1"></td>
-                    <td><img src="{{ STATIC_URL }}images/redX.png" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 1);"></td></tr>
+                    <td><img src="{{ STATIC_URL }}images/redX.png" id="delete1" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 1);"></td></tr>
                 <tr><td><input id="locationInput2" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 2"></td>
-                    <td><img src="{{ STATIC_URL }}images/redX.png" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 2);"></td></tr>
+                    <td><img src="{{ STATIC_URL }}images/redX.png" id="delete2" alt="Delete marker" height="30" width="30" disabled="true" onclick="deleteClicked(event, 2);"></td></tr>
                 <tr><td><input id="locationInput3" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 3"></td>
-                    <td><img src="{{ STATIC_URL }}images/redX.png" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 3);"></td></tr>
+                    <td><img src="{{ STATIC_URL }}images/redX.png" id="delete3" alt="Delete marker" height="30" width="30" disabled="true" onclick="deleteClicked(event, 3);"></td></tr>
                 <tr><td><input id="locationInput4" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 4"></td>
-                    <td><img src="{{ STATIC_URL }}images/redX.png" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 4);"></td></tr>
+                    <td><img src="{{ STATIC_URL }}images/redX.png" id="delete4" alt="Delete marker" height="30" width="30" disabled="true" onclick="deleteClicked(event, 4);"></td></tr>
                 <tr><td><input id="locationInput5" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 5"></td>
-                    <td><img src="{{ STATIC_URL }}images/redX.png" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 5);"></td></tr>
+                    <td><img src="{{ STATIC_URL }}images/redX.png" id="delete5" alt="Delete marker" height="30" width="30" disabled="true" onclick="deleteClicked(event, 5);"></td></tr>
             </table>
             {% if user.is_authenticated %}
             Logged in as {{ user.username }}<br/>
@@ -272,7 +272,7 @@
         onrendered: function(canvas) {
             var dataUrl= canvas.toDataURL("image/png");
             console.log(dataUrl);
-            // DO SOMETHING WITH THE DATAURL
+            // TODO: DO SOMETHING WITH THE DATAURL
             // Eg. write it to the page
 
     $(document).ready(function(){
