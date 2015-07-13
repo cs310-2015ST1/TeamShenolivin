@@ -19,6 +19,8 @@
                 var inputLocations = [];
                 
                 function initialize() {
+
+
                     
                     // map setup
                     var mapProp = {
@@ -30,20 +32,20 @@
                     var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
                     
                     var allBikeWays = {{ allBikeWays }};
-                    console.log(allBikeWays[0]);
-                    console.log("under defined var");
-                    console.log("above for loop");
+                    //console.log(allBikeWays[0]);
+                    //console.log("under defined var");
+                    //console.log("above for loop");
                     for (var i = 0; i < allBikeWays.length; i++) {
                         plotBikeWay(allBikeWays[i], map);
                     }
                     
                     // setting up the search boxes
                     var inputBoxes = document.querySelectorAll("input[type=text]");
-                    console.log(inputBoxes.length);
+                    //console.log(inputBoxes.length);
                     
                     for (var i = 0; i < inputBoxes.length; i++) {
                         
-                        console.log("Found " + inputBoxes[i].id);
+                        //console.log("Found " + inputBoxes[i].id);
                         
                         // make a struct of related data for each input box
                         // save all the information in an array of structs
@@ -60,20 +62,22 @@
                             markerIcon: "{{ STATIC_URL }}images/marker" + (i+1).toString() + ".png"
                         };
                     
-                        console.log(inputLocations[i].markerIcon);
+                        //console.log(inputLocations[i].markerIcon);
                         inputLocations[i].marker.setVisible(false);
 
                         // create the listener for when the text box is updated
                         google.maps.event.addListener(inputLocations[i].searchBox, 'place_changed', function() {
+                            console.log("Location 1 Name: {{ RouteForm.location1.name }}");
+                            console.log("Location 1 Value: {{ RouteForm.location1.value }}");
                                                       
                             var bounds = new google.maps.LatLngBounds();
                             var invalidLocations = [];
                             var numMarkers = 0;
 
                             for (var i = 0; i < inputLocations.length; i++) {
-                                console.log("Executing input change callback");
+                                //console.log("Executing input change callback");
                                 var place = inputLocations[i].searchBox.getPlace();
-                                console.log(inputLocations[i].searchBox.getPlace());
+                                //console.log(inputLocations[i].searchBox.getPlace());
                                                   
                                 if (place == null) {
                                     if (i < 4) {
@@ -273,18 +277,26 @@
         </div>
         <div id = "extraData">
             Locations:
-            <table id="markerTable"><br/>
-                <tr><td><input id="locationInput1" class="controls" type="text" style="background-color:#FFFFFF" placeholder="Location 1"></td>
-                    <td><img src="{{ STATIC_URL }}images/redX.png" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 1);"></td></tr>
-                <tr><td><input id="locationInput2" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 2"></td>
-                    <td><img src="{{ STATIC_URL }}images/redX.png" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 2);"></td></tr>
-                <tr><td><input id="locationInput3" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 3"></td>
-                    <td><img src="{{ STATIC_URL }}images/redX.png" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 3);"></td></tr>
-                <tr><td><input id="locationInput4" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 4"></td>
-                    <td><img src="{{ STATIC_URL }}images/redX.png" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 4);"></td></tr>
-                <tr><td><input id="locationInput5" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 5"></td>
-                    <td><img src="{{ STATIC_URL }}images/redX.png" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 5);"></td></tr>
-            </table>
+            <form id="route_form" action="" method="post">
+                {% csrf_token %}
+                <table id="markerTable"><br/>
+
+                    <tr><td><input id="locationInput1" class="controls" type="text" style="background-color:#FFFFFF" placeholder="Location 1" name="{{ RouteForm.location1.name }}" value="{{ RouteForm.location1.value }}"></td>
+
+                        <td><img src="{{ STATIC_URL }}images/redX.png" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 1);"></td></tr>
+                    <tr><td><input id="locationInput2" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 2"></td>
+                        <td><img src="{{ STATIC_URL }}images/redX.png" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 2);"></td></tr>
+                    <tr><td><input id="locationInput3" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 3"></td>
+                        <td><img src="{{ STATIC_URL }}images/redX.png" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 3);"></td></tr>
+                    <tr><td><input id="locationInput4" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 4"></td>
+                        <td><img src="{{ STATIC_URL }}images/redX.png" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 4);"></td></tr>
+                    <tr><td><input id="locationInput5" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 5"></td>
+                        <td><img src="{{ STATIC_URL }}images/redX.png" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 5);"></td></tr>
+                </table>
+                <button class="submitBtn" type="submit">Plan Route</button>
+            </form>
+            <button class="submitBtn" type="reset" onclick="resetClicked(event)">Reset Markers</button>
+            <br/>
             {% if user.is_authenticated %}
             Logged in as {{ user.username }}<br/>
             {% endif %}
@@ -296,7 +308,7 @@
                 <input class="submitBtn" type="submit" value="Update Database" name="update"> </input>
             </form>
             {% endif %}
-            <button class="submitBtn" type="reset" onclick="resetClicked(event)">Reset Markers</button>
+            
         </div>
         <div id="googleMap">
         </div>

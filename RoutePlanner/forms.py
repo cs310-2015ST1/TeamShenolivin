@@ -8,3 +8,10 @@ class UserForm(forms.ModelForm):
         model = User
         fields = ('username', 'email', 'password')
         
+        
+class RouteForm(forms.Form):
+    location1 = forms.CharField(label='Location 1', max_length=200)
+    location2 = forms.CharField(label='Location 2', max_length=200)
+    location3 = forms.CharField(label='Location 3', max_length=200)
+    location4 = forms.CharField(label='Location 4', max_length=200)
+    location5 = forms.CharField(label='Location 5', max_length=200)
