@@ -171,9 +171,10 @@ class BikeWayManager:
         return BikeWayManager.instance.get_time()
 
 
-# stores all the bikeways in the database
-class Route(models.Model):
+# stores all searched location in the database
+class Location(models.Model):
     name = models.CharField(max_length=100)
+    time = models.DateField(auto_now_add=True)
     coordinates = models.TextField()
     
     def __unicode__(self):
@@ -182,36 +183,36 @@ class Route(models.Model):
 
 # singleton pattern adapted from:
 # http://python-3-patterns-idioms-test.readthedocs.org/en/latest/Singleton.html
-# manages when the bikeway data is parsed
-class RouteManager:
-    class __RouteManager:
+# manages searched locations
+class LocationManager:
+    class __LocationManager:
         def __init__(self):
-            self.cached_routes = []
+            self.cached_locations = []
         
         def __str__(self):
-            return "RouteManager self"
+            return "LocationManager self"
     
-        def add_route(self, route):
-            if cached_routes.len() > 20:
-                self.cached_routes.pop(0)
-            self.cached_routes.append(route)
+        def add_location(self, location):
+            if cached_locations.len() > 20:
+                self.cached_locations.pop(0)
+            self.cached_locations.append(location)
 
-        def remove_route(self, route):
-            self.cached_routes.remove(route)
+        def remove_location(self, location):
+            self.cached_locations.remove(location)
                 
-        def reset_routes(self):
-            self.cached_routes = []
+        def reset_locations(self):
+            self.cached_locations = []
     
-        # methods go here
+        # other methods go here
     
-    print "RouteManager instance set to None"
+    print "LocationManager instance set to None"
     instance = None
     
     def __init__(self):
         print "RM init called"
-        if RouteManager.instance is None:
+        if LocationManager.instance is None:
             print "no RM instance yet"
-            RouteManager.instance = RouteManager.__RouteManager()
+            LocationManager.instance = LocationManager.__LocationManager()
 
 
 class UpdateTimer:

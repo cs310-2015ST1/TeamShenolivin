@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- Please do not change. At least inform me before making changes. -->
 {% load staticfiles %}
 <html>
 
@@ -10,80 +9,85 @@
         <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans" />
         <link rel="stylesheet" type="text/css" href="{% static "css/htmlStyle.css" %}" />
         <input type="hidden" id="dallBikeWays" name="variable" value="{{ allBikeWays }}">
-        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places">
-	    </script>
-        
-        <script type="text/javascript">
-            var loggedIn = false;
-            var times = 0;
-            var inputLocations = [];
-             
-
-            function initialize() {
+            <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places">
+                </script>
             
-                // map setup
-                var mapProp = {
-                center:new google.maps.LatLng(49.2827,-123.1207),
-                zoom:12,
-                mapTypeId:google.maps.MapTypeId.ROADMAP
-                };
-                var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
-
-
-                var allBikeWays = {{ allBikeWays }};
-                console.log(allBikeWays[0]);
-                console.log("under defined var");
-                console.log("above for loop");
-                for (var i = 0; i < allBikeWays.length; i++) {
-                plotBikeWay(allBikeWays[i], map);
-                // console.log("in index for loop");
-                }
-
-                // setting up the search boxes
-
-                var inputBoxes = document.querySelectorAll("input[type=text]");
-                console.log(inputBoxes.length);
+            <script type="text/javascript">
+                var loggedIn = false;
+                var times = 0;
+                var inputLocations = [];
                 
-                for(var i = 0; i < inputBoxes.length; i++) {
-
-                    console.log("Found " + inputBoxes[i].id);
-
-                    // make a struct of related data for each input box
-                    //console.log(searchBox);
-                    // save all the information in an array of structs
-                    inputLocations[i] = { 
-                        element: inputBoxes[i], 
-                        
-                        marker: new google.maps.Marker({
-                            map: map,
-                            anchorPoint: new google.maps.Point(0, -29)
-                        }),
-
-                        searchBox: new google.maps.places.Autocomplete(/** @type {HTMLInputElement} */(inputBoxes[i])),
-
-                        markerIcon: "{{ STATIC_URL }}images/marker" + (i+1).toString() + ".png"
+                function initialize() {
+                    
+                    // map setup
+                    var mapProp = {
+                        center:new google.maps.LatLng(49.2827,-123.1207),
+                        zoom:12,
+                        mapTypeId:google.maps.MapTypeId.ROADMAP
                     };
-                    console.log(inputLocations[i].markerIcon);
-                    inputLocations[i].marker.setVisible(false);
-
-                    // create the listener for when the text box is updated
-                    google.maps.event.addListener(inputLocations[i].searchBox, 'place_changed', function() { 
-
-                        var bounds = new google.maps.LatLngBounds();
-                        var invalidLocations = [];
-
-                        for(var i = 0; i < inputLocations.length; i++) {
-                            console.log("Executing input change callback");
-                            var place = inputLocations[i].searchBox.getPlace();
-                            console.log(inputLocations[i].searchBox.getPlace());
+                    
+                    var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+                    
+                    var allBikeWays = {{ allBikeWays }};
+                    console.log(allBikeWays[0]);
+                    console.log("under defined var");
+                    console.log("above for loop");
+                    for (var i = 0; i < allBikeWays.length; i++) {
+                        plotBikeWay(allBikeWays[i], map);
+                    }
+                    
+                    // setting up the search boxes
+                    var inputBoxes = document.querySelectorAll("input[type=text]");
+                    console.log(inputBoxes.length);
+                    
+                    for (var i = 0; i < inputBoxes.length; i++) {
                         
-                            if (place == null) {
-                                continue;
-                            }
+                        console.log("Found " + inputBoxes[i].id);
+                        
+                        // make a struct of related data for each input box
+                        // save all the information in an array of structs
+                        inputLocations[i] = { 
+                            element: inputBoxes[i], 
+                        
+                            marker: new google.maps.Marker({
+                                map: map,
+                                anchorPoint: new google.maps.Point(0, -29)
+                            }),
+
+                            searchBox: new google.maps.places.Autocomplete(/** @type {HTMLInputElement} */(inputBoxes[i])),
+
+                            markerIcon: "{{ STATIC_URL }}images/marker" + (i+1).toString() + ".png"
+                        };
+                    
+                        console.log(inputLocations[i].markerIcon);
+                        inputLocations[i].marker.setVisible(false);
+
+                        // create the listener for when the text box is updated
+                        google.maps.event.addListener(inputLocations[i].searchBox, 'place_changed', function() {
+                                                      
+                            var bounds = new google.maps.LatLngBounds();
+                            var invalidLocations = [];
+                            var numMarkers = 0;
+
+                            for (var i = 0; i < inputLocations.length; i++) {
+                                console.log("Executing input change callback");
+                                var place = inputLocations[i].searchBox.getPlace();
+                                console.log(inputLocations[i].searchBox.getPlace());
+                                                  
+                                if (place == null) {
+                                    if (i < 4) {
+                                        document.getElementById("locationInput"+(i+2).toString()).disabled = true;
+                                        document.getElementById("locationInput"+(i+2).toString()).style.backgroundColor = '#CCCCCC';
+                                    }
+                                    continue;
+                                } else {
+                                    if (i < 4) {
+                                        document.getElementById("locationInput"+(i+2).toString()).disabled = false;
+                                        document.getElementById("locationInput"+(i+2).toString()).style.backgroundColor = '#FFFFFF';
+                                    }
+                                }
+                                                  
                             inputLocations[i].marker.setVisible(false);
-                        
-                            // Get the icon, place name, and location.
-                            
 
                             // Create a marker if the location can be found
                             if (place.geometry == null){
@@ -101,122 +105,40 @@
                             });
 
                             inputLocations[i].marker.setVisible(true);
-
+                            numMarkers++;
                             bounds.extend(place.geometry.location);
-                            
                         }
 
-                        if(invalidLocations.length > 0){
+                        if (invalidLocations.length > 0) {
                             var errMsg = invalidLocations.length > 1 ? "Locations ":"Location ";
                             errMsg += "not recognized:\n";
-                            for(j = 0; j < invalidLocations.length; j++){
+                            for (j = 0; j < invalidLocations.length; j++) {
                                 errMsg += invalidLocations[j] + "\n";
                             }
                             window.alert(errMsg);
                         }
-
-                        map.fitBounds(bounds);
-
+                                                  
+                        if (numMarkers != 0) {
+                            map.fitBounds(bounds);
+                        } else  {
+                            map.setCenter(new google.maps.LatLng(49.2827,-123.1207));
+                            map.setZoom(12);
+                        }
                     });
-
-                    
-
                 };
-
-
-
-
-           //      var markers1 = [];
-           //      var markers2 = [];
-           //      var markers3 = [];
-           //      var markers4 = [];
-           //      var markers5 = [];
-
-           //      var locationInput1 = /** @type {HTMLInputElement} */(document.getElementById('locationInput1'));
-           //      var locationInput2 = /** @type {HTMLInputElement} */(document.getElementById('locationInput2'));
-           //      var locationInput3 = /** @type {HTMLInputElement} */(document.getElementById('locationInput3'));
-           //      var locationInput4 = /** @type {HTMLInputElement} */(document.getElementById('locationInput4'));
-           //      var locationInput5 = /** @type {HTMLInputElement} */(document.getElementById('locationInput5'));
-           //      // map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-
-           //      var searchBox1 = new google.maps.places.SearchBox(/** @type {HTMLInputElement} */(locationInput1));
-           //      var searchBox2 = new google.maps.places.SearchBox(/** @type {HTMLInputElement} */(locationInput2));
-           //      var searchBox3 = new google.maps.places.SearchBox(/** @type {HTMLInputElement} */(locationInput3));
-           //      var searchBox4 = new google.maps.places.SearchBox(/** @type {HTMLInputElement} */(locationInput4));
-           //      var searchBox5 = new google.maps.places.SearchBox(/** @type {HTMLInputElement} */(locationInput5));
-           //      console.log(searchBox1);
-
-           //      google.maps.event.addListener(searchBox1, 'places_changed', function() { plotPlaces(searchBox1, markers1); });
-           //      google.maps.event.addListener(searchBox2, 'places_changed', function() { plotPlaces(searchBox2, markers2); });
-           //      google.maps.event.addListener(searchBox3, 'places_changed', function() { plotPlaces(searchBox3, markers3); });
-           //      google.maps.event.addListener(searchBox4, 'places_changed', function() { plotPlaces(searchBox4, markers4); });
-           //      google.maps.event.addListener(searchBox5, 'places_changed', function() { plotPlaces(searchBox5, markers5); });
-
-
-
-           //      function plotPlaces(searchBox, markers) {
-    			    // var places = searchBox.getPlaces();
-           //          console.log(searchBox);
-           //          console.log(searchBox.getPlaces());
-    			
-    			    // if (places.length == 0) {
-    			    //   return;
-    			    // }
-    			    // for (var i = 0, marker; marker = markers[i]; i++) {
-    			    //   marker.setMap(null);
-    			    // }
-    			
-    			    // // For each place, get the icon, place name, and location.
-    			    // markers = [];
-    			    // var bounds = new google.maps.LatLngBounds();
-    			    // for (var i = 0, place; place = places[i]; i++) {
-    			    //   var image = {
-    			    //     url: place.icon,
-    			    //     size: new google.maps.Size(71, 71),
-    			    //     origin: new google.maps.Point(0, 0),
-    			    //     anchor: new google.maps.Point(17, 34),
-    			    //     scaledSize: new google.maps.Size(25, 25)
-    			    //   };
-    			
-    			    //   // Create a marker for each place.
-           //            var iconBase = '';
-    			    //   var marker = new google.maps.Marker({
-    			    //     map: map,
-    			    //     //icon: image,
-           //              icon: 'http://maps.google.com/mapfiles/marker.png',
-    			    //     title: place.name,
-    			    //     position: place.geometry.location
-    			    //   });
-    			
-    			    //   markers.push(marker);
-    			
-    			    //   bounds.extend(place.geometry.location);
-    			    // }
-    			
-    			    // map.fitBounds(bounds);
-           //      }
-                // [END region_getplaces]
 
                 // Bias the SearchBox results towards places that are within the bounds of the
                 // current map's viewport.
                 google.maps.event.addListener(map, 'bounds_changed', function() {
                     var bounds = map.getBounds();
 
-                    for(var i = 0; i < inputLocations.length; i++) {
+                    for (var i = 0; i < inputLocations.length; i++) {
                         inputLocations[i].searchBox.setBounds(bounds);
 
                     }
-                    // searchBox1.setBounds(bounds);
-                    // searchBox2.setBounds(bounds);
-                    // searchBox3.setBounds(bounds);
-                    // searchBox4.setBounds(bounds);
-                    // searchBox5.setBounds(bounds);
                 });
-			  
-
             }
-
-    
+            
             google.maps.event.addDomListener(window, 'load', initialize);
             
             function deleteClicked(e, number) {
@@ -226,85 +148,85 @@
                     e.preventDefault();
                     console.log("cancelled deleting marker # " + number.toString());
                 }
-                
             }
-        
+            
             function deleteMarker(number) {
                 console.log("removing marker # " + number.toString());
                 inputLocations[number-1].marker.setMap(null);
                 document.getElementById("locationInput"+number.toString()).value = "";
+                shiftLocations(number-1);
             }
-        
+            
+            function shiftLocations(index) {
+                for (var j = index; j < inputLocations.length-1; j++) {
+                    inputLocations[j].searchBox.set('place', inputLocations[j+1].searchBox.getPlace());
+                    document.getElementById("locationInput"+(j+1).toString()).value = document.getElementById("locationInput"+(j+2).toString()).value;
+                }
+                inputLocations[inputLocations.length-1].searchBox.set('place', void(0));
+                document.getElementById("locationInput"+inputLocations.length.toString()).value = "";
+            }
+            
             function resetClicked(e) {
                 if (confirm('Are you sure you want to remove all markers from the map?'))
-                    removeAllMarkers();
+                removeAllMarkers();
                 else {
                     e.preventDefault();
                     console.log("cancelled deleting all markers");
                 }
-                    
             }
-        
+            
             function removeAllMarkers() {
                 console.log("removing all markers");
                 for (var i = 0, ip; ip = inputLocations[i]; i++) {
                     ip.marker.setMap(null);
                     document.getElementById("locationInput"+(i+1).toString()).value = "";
+                    ip.searchBox.set('place',void(0));
                 }
             }
-
-        </script>
-
-    </head>
+            
+                </script>
+            
+            </head>
     <body>
-    <nav>
-        <div id='navBar'>
-            <ul>
-            	<a href="/RoutePlanner/"> <li>Home </li></a> 
-            	<a href="/RoutePlanner/about.html"> <li> About </li></a>                     
-                {% if user.is_authenticated %}
-		        <a href="/RoutePlanner/logout.html"> <li>Log Out</li></a> 
-		        <a href="/RoutePlanner/account.html"> <li>My Account</li></a> 
-		        {% else %}
-		        <a href="/RoutePlanner/login.html"><li>Log In</li></a> 
-		        <a href="/RoutePlanner/register.html"><li>Get Started</li></a> 
-		        {% endif %}
-                
-            </ul>
-        </div>
-    </nav>
+        <nav>
+            <div id='navBar'>
+                <ul>
+                    <a href="/RoutePlanner/"> <li>Home </li></a>
+                    <a href="/RoutePlanner/about.html"> <li> About </li></a>
+                    {% if user.is_authenticated %}
+                    <a href="/RoutePlanner/logout.html"> <li>Log Out</li></a>
+                    <a href="/RoutePlanner/account.html"> <li>My Account</li></a>
+                    {% else %}
+                    <a href="/RoutePlanner/login.html"><li>Log In</li></a>
+                    <a href="/RoutePlanner/register.html"><li>Get Started</li></a>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
         <div id='title'>
-            <h1> Route Planner </h1>          
+            <h1> Route Planner </h1>
         </div>
         <div id="infoInput">
-            
-<!--             <form>
-                <p class="instructions"> Enter your starting point: </p>
-                <input type="text" placeholder="Location"> <br/>
-                <p class="instructions"> Enter your destination: </p>
-                <input type="text" placeholder="location"> <br/>
-                <input class="submitBtn" type="button" value="Submit"> </input>
-            </form> -->
-       </div>
-       <div id = "extraData">
+        </div>
+        <div id = "extraData">
             Locations:
             <table id="markerTable"><br/>
-            <tr><td><input id="locationInput1" class="controls" type="text" placeholder="Location 1"></td>
-                <td><img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Red_x.svg" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 1);"></td></tr>
-            <tr><td><input id="locationInput2" class="controls" type="text" placeholder="Location 2"></td>
-                <td><img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Red_x.svg" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 2);"></td></tr>
-            <tr><td><input id="locationInput3" class="controls" type="text" placeholder="Location 3"></td>
-                <td><img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Red_x.svg" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 3);"></td></tr>
-            <tr><td><input id="locationInput4" class="controls" type="text" placeholder="Location 4"></td>
-                <td><img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Red_x.svg" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 4);"></td></tr>
-            <tr><td><input id="locationInput5" class="controls" type="text" placeholder="Location 5"></td>
-                <td><img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Red_x.svg" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 5);"></td></tr>
+                <tr><td><input id="locationInput1" class="controls" type="text" style="background-color:#FFFFFF" placeholder="Location 1"></td>
+                    <td><img src="{{ STATIC_URL }}images/redX.png" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 1);"></td></tr>
+                <tr><td><input id="locationInput2" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 2"></td>
+                    <td><img src="{{ STATIC_URL }}images/redX.png" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 2);"></td></tr>
+                <tr><td><input id="locationInput3" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 3"></td>
+                    <td><img src="{{ STATIC_URL }}images/redX.png" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 3);"></td></tr>
+                <tr><td><input id="locationInput4" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 4"></td>
+                    <td><img src="{{ STATIC_URL }}images/redX.png" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 4);"></td></tr>
+                <tr><td><input id="locationInput5" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 5"></td>
+                    <td><img src="{{ STATIC_URL }}images/redX.png" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 5);"></td></tr>
             </table>
             {% if user.is_authenticated %}
-            	Logged in as {{ user.username }}<br/>
+            Logged in as {{ user.username }}<br/>
             {% endif %}
             <br/>
-            	Last updated: {{ updateTime|safe }}
+            Last updated: {{ updateTime|safe }}
             <br/>
             {% if user.is_superuser %}
             <form action="#" method="get">
@@ -313,10 +235,9 @@
             {% endif %}
             <button class="submitBtn" type="reset" onclick="resetClicked(event)">Reset Markers</button>
         </div>
-        
         <div id="googleMap">
         </div>
         
     </body>
-
+    
 </html>
