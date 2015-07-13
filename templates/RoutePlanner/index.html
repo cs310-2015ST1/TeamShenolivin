@@ -60,7 +60,7 @@
                         console.log(inputLocations[i].markerIcon);
                         inputLocations[i].marker.setVisible(false);
                         
-                        document.getElementById("locationInput"+(i+1).toString()).value = "";
+                        // document.getElementById("locationInput"+(i+1).toString()).value = "";
 
                         // create the listener for when the text box is updated
                         google.maps.event.addListener(inputLocations[i].searchBox, 'place_changed', function() {
@@ -68,13 +68,14 @@
                             var bounds = new google.maps.LatLngBounds();
                             var invalidLocations = [];
                             var numMarkers = 0;
-
+                            // disabling and enabling input text boxes
                             for (var i = 0; i < inputLocations.length; i++) {
                                 console.log("Executing input change callback");
                                 var place = inputLocations[i].searchBox.getPlace();
                                 console.log(inputLocations[i].searchBox.getPlace());
+                                var locationString = document.getElementById("locationInput" + (i+2).toString()).value;
                                                   
-                                if (place == null) {
+                                if (place == null && locationString === "") {
                                     if (i < 4) {
                                         document.getElementById("locationInput"+(i+2).toString()).disabled = true;
                                         document.getElementById("delete"+(i+2).toString()).disabled = true;
@@ -190,6 +191,29 @@
                     ip.searchBox.set('place',void(0));
                 }
             }
+
+            function calcRoute(startIndex, finIndex) {
+                var startID = "locationInput" + (startIndex + 1).toString();
+                var endID = "locationInput" + (finIndex + 1).toString();
+                  var start = document.getElementById(startID).value;
+                  var end = document.getElementById(endID).value;
+                  var request = {
+                      origin:start,
+                      destination:end,
+                      travelMode: google.maps.TravelMode.DRIVING
+                  };
+                  directionsService.route(request, function(response, status) {
+                    if (status == google.maps.DirectionsStatus.OK) {
+                      directionsDisplay.setDirections(response);
+                      var plannedRoutes = response.routes;
+                      var singleRoute = plannedRoutes[0];
+                      var leg = singleRoute.legs[0];
+                      var steps = leg.steps;
+                      var length = steps.length;
+                      alert("There are " + length + " steps in these direction instructions.");
+                    }
+                  });
+             }
             
                 </script>
             
