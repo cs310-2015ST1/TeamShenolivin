@@ -284,16 +284,19 @@
             }
 
             function showSteps(directionResult) {
-              var myRoute = directionResult.routes[0].legs[0];
+              for (var k = 0; k < directionResult.routes[0].legs.length; k++) {
+                console.log(directionResult.routes[0].legs.length);
+                  var myRoute = directionResult.routes[0].legs[k];
 
-              for (var i = 0; i < myRoute.steps.length; i++) {
-                var marker = new google.maps.Marker({
-                  position: myRoute.steps[i].start_location,
-                  map: map,
-                  icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|00ff00'
-                });
-                attachInstructionText(marker, myRoute.steps[i].instructions);
-                markerArray[i] = marker;
+                  for (var i = 0; i < myRoute.steps.length; i++) {
+                    var marker = new google.maps.Marker({
+                      position: myRoute.steps[i].start_location,
+                      map: map,
+                      icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|00ff00'
+                    });
+                    attachInstructionText(marker, myRoute.steps[i].instructions);
+                    markerArray[i] = marker;
+                  }
               }
             }
 
