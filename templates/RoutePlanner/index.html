@@ -251,10 +251,6 @@
                     }
                 }
                 // End of plotting multiple destinations
-                // var startID = "locationInput" + (startIndex + 1).toString();
-                // var endID = "locationInput" + (finIndex + 1).toString();
-                //   var start = document.getElementById(startID).value;
-                //   var end = document.getElementById(endID).value;
                   var request = {
                       origin: startLoc,
                       destination: destLoc,
@@ -298,6 +294,33 @@
                     markerArray[i] = marker;
                   }
               }
+            }
+
+            function calcRt() {
+                var startIndex = document.getElementById("spinner1").value;
+                var finIndex = document.getElementById("spinner2").value;
+                var startID = "locationInput" + (startIndex).toString();
+                var endID = "locationInput" + (finIndex).toString();
+                var start = document.getElementById(startID).value;
+                var end = document.getElementById(endID).value;
+                var request = {
+                      origin: start,
+                      destination: end,
+                      travelMode: google.maps.TravelMode.BICYCLING
+                  };
+                  directionsService.route(request, function(response, status) {
+                    if (status == google.maps.DirectionsStatus.OK) {
+                      directionsDisplay.setDirections(response);
+                      var plannedRoutes = response.routes;
+                      var singleRoute = plannedRoutes[0];
+                      var leg = singleRoute.legs[0];
+                      var steps = leg.steps;
+                      var length = steps.length;
+                      alert("There are " + length + " steps in these direction instructions.");
+                      markerArray = [];
+                      showSteps(response);
+                    }
+                  });
             }
 
         </script>
@@ -353,7 +376,8 @@
             <br><input type="number" MIN="1" MAX="5" STEP="1" VALUE="1" SIZE="6" id="spinner1" class="controls"> </input>
             <br> Please enter the end location.
             <br><input type="number" MIN="1" MAX="5" STEP="1" VALUE="5" SIZE="6" id="spinner2" class="controls"> </input>
-            <br><button class="submitBtn" type="button" onclick="calcRoute();">Plot Routes</button>
+            <br><button class="submitBtn" type="button" onclick="calcRt();">Plot Routes</button>
+            <br><button class="submitBtn" type="button" onclick="calcRoute();">Plot All Routes</button>
         </div>
         <div id="googleMap">
         </div>
