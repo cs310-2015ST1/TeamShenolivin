@@ -11,6 +11,6 @@ assert "No results found." not in driver.page_source
 
 #click about
 about = driver.find_element_by_link_text("About")
-about.click()
+driver.click(about)
 
 #driver.close()
