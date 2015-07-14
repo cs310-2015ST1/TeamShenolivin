@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+    <head>
+        <title>MegaByke Route Planner</title>
+        <script src="http://maps.googleapis.com/maps/api/js"></script>
+        <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans" />
+        <link rel="stylesheet" type="text/css" href="{% static "css/htmlStyle.css" %}" />
+        
+
+
+        <!--<script type="text/javascript">
+            var routes = {{ route_list }};
+            var list = document.getElementById('user_routes');
+            for (var i = 0; i < routes.length; i++) {
+                var li = document.createElement('li');
+                li.innerHTML = "Location 1" + ': ' + routes[i].location1;
+                li.innerHTML = "Location 2" + ': ' + routes[i].location2;
+                li.innerHTML = "Location 3" + ': ' + routes[i].location3;
+                li.innerHTML = "Location 4" + ': ' + routes[i].location4;
+                li.innerHTML = "Location 5" + ': ' + routes[i].location5;
+                ist.insertBefore(li, list.firstChild);
+            }
+            
+
+        </script>-->
+    </head>
+
+    <body onLoad='makelist()'>
+	    <nav>
+	        <div id='navBar'>
+            <ul>
+            	<a href="/RoutePlanner/"> <li>Home </li></a> 
+            	<a href="/RoutePlanner/about.html"> <li> About </li></a>                     
+                {% if user.is_authenticated %}
+		        <a href="/RoutePlanner/logout.html"> <li>Log Out</li></a> 
+		        <a href="/RoutePlanner/account.html"> <li>My Account</li></a> 
+		        {% else %}
+		        <a href="/RoutePlanner/login.html"><li>Log In</li></a> 
+		        <a href="/RoutePlanner/register.html"><li>Get Started</li></a> 
+		        {% endif %}
+                
+
+            </ul>
+	        </div>
+	    </nav>
+	    <div id='title'>
+	        <h1>Your Account</h1>
+	        {% if user.is_authenticated %}
+            Hello, {{ user.username }}<br/>
+            {% endif %}
+	        Your recent routes:
+            <ul>
+              {% for route in route_list %}
+                <li> Route ID: {{ route.id }}
+                    <ol>
+                        <li>{{ route.location1 }}</li>
+                        <li>{{ route.location2 }}</li>
+                        <li>{{ route.location3 }}</li>
+                        <li>{{ route.location4 }}</li>
+                        <li>{{ route.location5 }}</li>
+                    </ol>
+
+                </li><br/>
+              {% endfor %}
+            </ul>
+	        
+	        
+        </div>
+
+    </body>
+</html>

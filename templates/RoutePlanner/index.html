@@ -4,14 +4,13 @@
 
     <head>
         <title>MegaByke Route Planner</title>
-        <script src="http://maps.googleapis.com/maps/api/js"></script>
+        <!--<script src="http://maps.googleapis.com/maps/api/js"></script>-->
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="{%  static "js/bikeWayPlotter.js" %}"></script>
         <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans" />
         <link rel="stylesheet" type="text/css" href="{% static "css/htmlStyle.css" %}" />
         <input type="hidden" id="dallBikeWays" name="variable" value="{{ allBikeWays }}">
-            <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places">
-                </script>
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
             
             <script type="text/javascript">
                 var loggedIn = false;
@@ -66,9 +65,7 @@
                         inputLocations[i].marker.setVisible(false);
 
                         // create the listener for when the text box is updated
-                        google.maps.event.addListener(inputLocations[i].searchBox, 'place_changed', function() {plotPoints()                                                  
-                            
-                    });
+                        google.maps.event.addListener(inputLocations[i].searchBox, 'place_changed', function() {plotPoints(map)});
                 };
 
                 // Bias the SearchBox results towards places that are within the bounds of the
@@ -85,7 +82,7 @@
             
             google.maps.event.addDomListener(window, 'load', initialize);
 
-            function plotPoints(){
+            function plotPoints(map){
                 var bounds = new google.maps.LatLngBounds();
                 var invalidLocations = [];
                 var numMarkers = 0;
@@ -108,26 +105,38 @@
                         }
                     }
                                       
-                inputLocations[i].marker.setVisible(false);
+                    inputLocations[i].marker.setVisible(false);
 
-                // Create a marker if the location can be found
-                if (place.geometry == null){
-                    invalidLocations.push(place.name); 
-                    console.log("invalid location: " + place.name);
-                    continue;
+                    // Create a marker if the location can be found
+                    if (place.geometry == null){
+                        invalidLocations.push(place.name); 
+                        console.log("invalid location: " + place.name);
+                        continue;
+                    }
+                    
+                    inputLocations[i].marker = new google.maps.Marker({
+                        map: map,
+                        //icon: 'http://maps.google.com/mapfiles/marker.png',
+                        icon: inputLocations[i].markerIcon,
+                        title: place.name,
+                        position: place.geometry.location
+                    });
+
+
+                    inputLocations[i].marker.setVisible(true);
+                    numMarkers++;
+                    bounds.extend(place.geometry.location);
                 }
-                
-                inputLocations[i].marker = new google.maps.Marker({
-                    map: map,
-                    //icon: 'http://maps.google.com/mapfiles/marker.png',
-                    icon: inputLocations[i].markerIcon,
-                    title: place.name,
-                    position: place.geometry.location
-                });
 
-                inputLocations[i].marker.setVisible(true);
-                numMarkers++;
-                bounds.extend(place.geometry.location);
+                if (numMarkers != 0) {
+                    map.fitBounds(bounds);
+                    var max_zoom = 18;
+                    if(map.getZoom() > max_zoom) map.setZoom(max_zoom);
+    
+                } else  {
+                    map.setCenter(new google.maps.LatLng(49.2827,-123.1207));
+                    map.setZoom(12);
+                }
             }
             
             function deleteClicked(e, number) {
@@ -173,7 +182,7 @@
                 }
             }
             
-                </script>
+            </script>
             
             </head>
     <body>

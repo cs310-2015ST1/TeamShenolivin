@@ -79,10 +79,14 @@ class KMLParser:
 # contains all user data
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
-    searchLocations = []
     
     def __unicode__(self):
         return self.user.username
+    
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.create(user=instance)
+        post_save.connect(create_user_profile, sender=User)
     
 
 # stores all the bikeways in the database
@@ -268,5 +272,6 @@ class Route(models.Model):
     location3 = models.CharField(max_length=200, blank=True)
     location4 = models.CharField(max_length=200, blank=True)
     location5 = models.CharField(max_length=200, blank=True)
+    userprofile = models.ForeignKey(UserProfile, blank=True, null=True)
     def __unicode__(self):
         return str(self.id)

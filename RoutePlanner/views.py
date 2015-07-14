@@ -145,7 +145,15 @@ def user_logout(request):
 def about(request):
     return render(request, 'RoutePlanner/about.html', {})
 
-
+def account(request):
+    if request.user.is_authenticated():
+        current_user = request.user
+        route_list = list(Route.objects.filter(userprofile=current_user.userprofile))
+    else:
+        route_list = [];
+        
+    return render(request, 'RoutePlanner/account.html', 
+                  {'route_list': route_list})
 
 # plot route
 def plot_route(request):
@@ -163,7 +171,16 @@ def plot_route(request):
             print "form is valid"
             # Save the route form data to the database.
             route = route_form.save()
+            
+            # save the current route the user profile, if logged in
+            if request.user.is_authenticated():
+                current_user = request.user
+                current_profile = current_user.userprofile
+                #TODO: add check for if the user has 20
+                route.userprofile = current_profile
+                
             route.save()
+            
 
         # Invalid form or forms - mistakes or something else?
         # Print problems to the terminal.
