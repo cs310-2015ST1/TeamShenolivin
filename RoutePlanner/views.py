@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
-from RoutePlanner.forms import UserForm
-from RoutePlanner.models import UserProfile, BikeWay, BikeWayManager, LocationManager
+from RoutePlanner.forms import UserForm, RouteForm
+from RoutePlanner.models import UserProfile, BikeWay, BikeWayManager, LocationManager, Route
 
 def index(request):
 
@@ -144,3 +144,51 @@ def user_logout(request):
 
 def about(request):
     return render(request, 'RoutePlanner/about.html', {})
+
+
+
+# plot route
+def plot_route(request):
+
+    # If it's a HTTP POST, we're interested in processing form data.
+    print "processing plot route request"
+    if request.method == 'POST':
+        # Attempt to grab information from the raw form information.
+
+        route_form = RouteForm(data=request.POST)
+        #profile_form = UserProfileForm(data=request.POST)
+
+        # If the two forms are valid...
+        if route_form.is_valid():
+            print "form is valid"
+            # Save the route form data to the database.
+            route = route_form.save()
+            route.save()
+
+
+        # Invalid form or forms - mistakes or something else?
+        # Print problems to the terminal.
+        # They'll also be shown to the user.
+        else:
+            print "form is invalid"
+            route_form = RouteForm()
+            route = route_form.save()
+            route.save()
+            print route_form.errors
+
+    # Not a HTTP POST, so we render our form using two ModelForm instances.
+    # These forms will be blank, ready for user input.
+    else:
+        print "wrong request type"
+        route_form = RouteForm()
+        route = route_form.save()
+        route.save()
+
+    # Render the template depending on the context.
+    return HttpResponseRedirect('/RoutePlanner/')
+    # TODO: actually handle this properly instead of going back to the main page
+    # return render(request,
+            # TODO: actually handle this properly instead of going back to the main page
+            # 'RoutePlanner/route.html',
+            # {'route_form': route_form} )
+    

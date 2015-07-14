@@ -259,3 +259,14 @@ class UpdateTimer:
                     to_sleep = SECONDS_IN_DAY - (current_date - target_date).total_seconds()
                     print str(to_sleep)
                     time.sleep(to_sleep)
+                    
+                    
+# stores plotted routes
+class Route(models.Model):
+    location1 = models.CharField(max_length=200, blank=True)
+    location2 = models.CharField(max_length=200, blank=True)
+    location3 = models.CharField(max_length=200, blank=True)
+    location4 = models.CharField(max_length=200, blank=True)
+    location5 = models.CharField(max_length=200, blank=True)
+    def __unicode__(self):
+        return self.name
