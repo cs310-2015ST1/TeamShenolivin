@@ -1,3 +1,4 @@
+__author__ = 'Sharon'
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
@@ -12,11 +13,10 @@ email = driver.find_element_by_id("id_email")
 password = driver.find_element_by_id("id_password")
 register = driver.find_element_by_name("submit")
 
-#this should fail, invalid characters
-username.send_keys("abc$$")
-password.send_keys("asdf")
+#this should work only once, then will become a duplicated account
+username.send_keys("qwerty")
+email.send_keys("qwerty@gmail.com")
+password.send_keys("qwerty")
 register.click()
 
-driver.find_element_by_id("id_username").clear()
-
-driver.close()
+#driver.close()
