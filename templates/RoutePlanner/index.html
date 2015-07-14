@@ -281,20 +281,20 @@
                 {% csrf_token %}
                 <table id="markerTable"><br/>
                     <!--<tr><td><input id="locationInput2" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 2" name="{{ form.location2.name }}" value="{{ form.location2.value }}"></td>-->
-
-                    <tr><td><input id="locationInput1" class="controls" type="text" style="background-color:#FFFFFF" placeholder="Location 1" name="location1" value="location1"></td>
+                    {{ form.location1.errors }}
+                    <tr><td><input id="locationInput1" class="controls" type="text" style="background-color:#FFFFFF" placeholder="Location 1" name="location1"></td>
                         <td><img src="{{ STATIC_URL }}images/redX.png" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 1);"></td></tr>
-
-                    <tr><td><input id="locationInput2" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 2" name="location2" value="location2"></td>
+                    {{ form.location2.errors }}
+                    <tr><td><input id="locationInput2" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 2" name="location2"></td>
                         <td><img src="{{ STATIC_URL }}images/redX.png" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 2);"></td></tr>
-
-                    <tr><td><input id="locationInput3" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 3" name="location3" value="location3"></td>
+                    {{ form.location3.errors }}
+                    <tr><td><input id="locationInput3" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 3" name="location3"></td>
                         <td><img src="{{ STATIC_URL }}images/redX.png" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 3);"></td></tr>
-
-                    <tr><td><input id="locationInput4" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 4" name="location4" value="location4"></td>
+                    {{ form.location4.errors }}
+                    <tr><td><input id="locationInput4" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 4" name="location4"></td>
                         <td><img src="{{ STATIC_URL }}images/redX.png" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 4);"></td></tr>
-
-                    <tr><td><input id="locationInput5" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 5" name="location5" value="location5"></td>
+                    {{ form.location5.errors }}
+                    <tr><td><input id="locationInput5" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 5" name="location5"></td>
                         <td><img src="{{ STATIC_URL }}images/redX.png" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 5);"></td></tr>
                 </table>
                 <button class="submitBtn" type="submit">Plan Route</button>

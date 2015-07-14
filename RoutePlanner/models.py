@@ -269,4 +269,4 @@ class Route(models.Model):
     location4 = models.CharField(max_length=200, blank=True)
     location5 = models.CharField(max_length=200, blank=True)
     def __unicode__(self):
-        return self.name
+        return str(self.id)

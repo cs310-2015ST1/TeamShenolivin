@@ -165,15 +165,10 @@ def plot_route(request):
             route = route_form.save()
             route.save()
 
-
         # Invalid form or forms - mistakes or something else?
         # Print problems to the terminal.
         # They'll also be shown to the user.
         else:
-            print "form is invalid"
-            route_form = RouteForm()
-            route = route_form.save()
-            route.save()
             print route_form.errors
 
     # Not a HTTP POST, so we render our form using two ModelForm instances.
@@ -181,8 +176,6 @@ def plot_route(request):
     else:
         print "wrong request type"
         route_form = RouteForm()
-        route = route_form.save()
-        route.save()
 
     # Render the template depending on the context.
     return HttpResponseRedirect('/RoutePlanner/')

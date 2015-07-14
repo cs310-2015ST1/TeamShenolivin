@@ -10,11 +10,11 @@ class UserForm(forms.ModelForm):
         
         
 class RouteForm(forms.ModelForm):
-    location1 = forms.CharField(label='Location 1', max_length=200)
-    location2 = forms.CharField(label='Location 2', max_length=200)
-    location3 = forms.CharField(label='Location 3', max_length=200)
-    location4 = forms.CharField(label='Location 4', max_length=200)
-    location5 = forms.CharField(label='Location 5', max_length=200)
+    location1 = forms.CharField(label='Location 1', max_length=200, required=False)
+    location2 = forms.CharField(label='Location 2', max_length=200, required=False)
+    location3 = forms.CharField(label='Location 3', max_length=200, required=False)
+    location4 = forms.CharField(label='Location 4', max_length=200, required=False)
+    location5 = forms.CharField(label='Location 5', max_length=200, required=False)
     
     
     class Meta:
