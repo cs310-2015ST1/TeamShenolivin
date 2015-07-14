@@ -158,7 +158,7 @@ def plot_route(request):
         route_form = RouteForm(data=request.POST)
         #profile_form = UserProfileForm(data=request.POST)
 
-        # If the two forms are valid...
+        # If the form is valid
         if route_form.is_valid():
             print "form is valid"
             # Save the route form data to the database.

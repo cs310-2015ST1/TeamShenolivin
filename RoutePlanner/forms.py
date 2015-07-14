@@ -16,7 +16,6 @@ class RouteForm(forms.ModelForm):
     location4 = forms.CharField(label='Location 4', max_length=200, required=False)
     location5 = forms.CharField(label='Location 5', max_length=200, required=False)
     
-    
     class Meta:
         # Provide an association between the ModelForm and a model
         model = Route

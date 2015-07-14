@@ -66,69 +66,8 @@
                         inputLocations[i].marker.setVisible(false);
 
                         // create the listener for when the text box is updated
-                        google.maps.event.addListener(inputLocations[i].searchBox, 'place_changed', function() {
-                            console.log("Location 1 Name: {{ RouteForm.location1.name }}");
-                            console.log("Location 1 Value: {{ RouteForm.location1.value }}");
-                                                      
-                            var bounds = new google.maps.LatLngBounds();
-                            var invalidLocations = [];
-                            var numMarkers = 0;
-
-                            for (var i = 0; i < inputLocations.length; i++) {
-                                //console.log("Executing input change callback");
-                                var place = inputLocations[i].searchBox.getPlace();
-                                //console.log(inputLocations[i].searchBox.getPlace());
-                                                  
-                                if (place == null) {
-                                    if (i < 4) {
-                                        document.getElementById("locationInput"+(i+2).toString()).disabled = true;
-                                        document.getElementById("locationInput"+(i+2).toString()).style.backgroundColor = '#CCCCCC';
-                                    }
-                                    continue;
-                                } else {
-                                    if (i < 4) {
-                                        document.getElementById("locationInput"+(i+2).toString()).disabled = false;
-                                        document.getElementById("locationInput"+(i+2).toString()).style.backgroundColor = '#FFFFFF';
-                                    }
-                                }
-                                                  
-                            inputLocations[i].marker.setVisible(false);
-
-                            // Create a marker if the location can be found
-                            if (place.geometry == null){
-                                invalidLocations.push(place.name); 
-                                console.log("invalid location: " + place.name);
-                                continue;
-                            }
+                        google.maps.event.addListener(inputLocations[i].searchBox, 'place_changed', function() {plotPoints()                                                  
                             
-                            inputLocations[i].marker = new google.maps.Marker({
-                                map: map,
-                                //icon: 'http://maps.google.com/mapfiles/marker.png',
-                                icon: inputLocations[i].markerIcon,
-                                title: place.name,
-                                position: place.geometry.location
-                            });
-
-                            inputLocations[i].marker.setVisible(true);
-                            numMarkers++;
-                            bounds.extend(place.geometry.location);
-                        }
-
-                        if (invalidLocations.length > 0) {
-                            var errMsg = invalidLocations.length > 1 ? "Locations ":"Location ";
-                            errMsg += "not recognized:\n";
-                            for (j = 0; j < invalidLocations.length; j++) {
-                                errMsg += invalidLocations[j] + "\n";
-                            }
-                            window.alert(errMsg);
-                        }
-                                                  
-                        if (numMarkers != 0) {
-                            map.fitBounds(bounds);
-                        } else  {
-                            map.setCenter(new google.maps.LatLng(49.2827,-123.1207));
-                            map.setZoom(12);
-                        }
                     });
                 };
 
@@ -145,6 +84,51 @@
             }
             
             google.maps.event.addDomListener(window, 'load', initialize);
+
+            function plotPoints(){
+                var bounds = new google.maps.LatLngBounds();
+                var invalidLocations = [];
+                var numMarkers = 0;
+
+                for (var i = 0; i < inputLocations.length; i++) {
+                    //console.log("Executing input change callback");
+                    var place = inputLocations[i].searchBox.getPlace();
+                    //console.log(inputLocations[i].searchBox.getPlace());
+                                      
+                    if (place == null) {
+                        if (i < 4) {
+                            document.getElementById("locationInput"+(i+2).toString()).disabled = true;
+                            document.getElementById("locationInput"+(i+2).toString()).style.backgroundColor = '#CCCCCC';
+                        }
+                        continue;
+                    } else {
+                        if (i < 4) {
+                            document.getElementById("locationInput"+(i+2).toString()).disabled = false;
+                            document.getElementById("locationInput"+(i+2).toString()).style.backgroundColor = '#FFFFFF';
+                        }
+                    }
+                                      
+                inputLocations[i].marker.setVisible(false);
+
+                // Create a marker if the location can be found
+                if (place.geometry == null){
+                    invalidLocations.push(place.name); 
+                    console.log("invalid location: " + place.name);
+                    continue;
+                }
+                
+                inputLocations[i].marker = new google.maps.Marker({
+                    map: map,
+                    //icon: 'http://maps.google.com/mapfiles/marker.png',
+                    icon: inputLocations[i].markerIcon,
+                    title: place.name,
+                    position: place.geometry.location
+                });
+
+                inputLocations[i].marker.setVisible(true);
+                numMarkers++;
+                bounds.extend(place.geometry.location);
+            }
             
             function deleteClicked(e, number) {
                 if (confirm('Are you sure you want to delete this marker from the map?'))
