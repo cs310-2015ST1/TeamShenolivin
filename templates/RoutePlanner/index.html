@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 {% load staticfiles %}
 <html>
-
     <head>
         <title>MegaByke Route Planner</title>
         <script src="http://maps.googleapis.com/maps/api/js"></script>
@@ -10,8 +9,8 @@
         <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans" />
         <link rel="stylesheet" type="text/css" href="{% static "css/htmlStyle.css" %}" />
         <input type="hidden" id="dallBikeWays" name="variable" value="{{ allBikeWays }}">
-            <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places">
-                </script>
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js" type="text/javascript"></script>
             
             <script type="text/javascript">
                 var loggedIn = false;
@@ -222,6 +221,10 @@
                     }
                   });
              }
+
+             function plotCalcRoute() {
+
+             }
             
                 </script>
             
@@ -274,60 +277,64 @@
                 <input class="submitBtn" type="submit" value="Update Database" name="update"> </input>
             </form>
             {% endif %}
-            <button class="submitBtn" type="reset" onclick="resetClicked(event)">Reset Markers</button>
+            <button class="submitBtn" type="reset" onclick="resetClicked(event);">Reset Markers</button>
+            <br> Please enter the start location.
+            <br><input type="number" MIN="1" MAX="5" STEP="1" VALUE="1" SIZE="6" id="spinner1" class="controls"> </input>
+            <br> Please enter the end location.
+            <br><input type="number" MIN="1" MAX="5" STEP="1" VALUE="5" SIZE="6" id="spinner2" class="controls"> </input>
+            <br><button class="submitBtn" type="button" onclick="plotCalcRoute();">Plot Routes</button>
         </div>
         <div id="googleMap">
         </div>
 
     <div id="fb-root"></div>
-    <script>
-    window.fbAsyncInit = function() {
-    FB.init({appId: '800885373358594', status: true, cookie: true,
-    xfbml: true});
-    };
-    (function() {
-    var e = document.createElement('script'); e.async = true;
-    e.src = document.location.protocol +
-    '//connect.facebook.net/en_US/all.js';
-    document.getElementById('fb-root').appendChild(e);
-    }());
-    </script>
-
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js" type="text/javascript"></script>
-
     <script type="text/javascript">
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId: '800885373358594',
+                status: true, 
+                cookie: true,
+                xfbml: true
+            });
+        };
+        function() {
+            var e = document.createElement('script'); 
+            e.async = true;
+            e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
+            document.getElementById('fb-root').appendChild(e);
+        }();
 
         function saveMapToDataUrl() {
 
-    var element = $("#mapDiv");
+            var element = $("#mapDiv");
 
-    html2canvas(element, {
-        useCORS: true,
-        onrendered: function(canvas) {
-            var dataUrl= canvas.toDataURL("image/png");
-            console.log(dataUrl);
-            // TODO: DO SOMETHING WITH THE DATAURL
-            // Eg. write it to the page
+            html2canvas(element, {
+                useCORS: true,
+                onrendered: function(canvas) {
+                    var dataUrl= canvas.toDataURL("image/png");
+                    console.log(dataUrl);
+                    // TODO: DO SOMETHING WITH THE DATAURL
+                    // Eg. write it to the page
 
-    $(document).ready(function(){
-    $('#share_button').click(function(e){
-    e.preventDefault();
-    FB.ui(
-    {
-    method: 'feed',
-    name: 'This is the content of the "name" field.',
-    link: 'http://127.0.0.1:8000/RoutePlanner/',
-    picture: 'dataUrl',
-    caption: 'This is the content of the "caption" field.',
-    description: 'This is the content of the "description" field, below the caption.',
-    message: ''
-    });
-    });
-    });
-
-      document.write('<img src="' + dataUrl + '"/>');
+                    $(document).ready(function(){
+                        $('#share_button').click(function(e){
+                            e.preventDefault();
+                            FB.ui(
+                                {
+                                    method: 'feed',
+                                    name: 'This is the content of the "name" field.',
+                                    link: 'http://127.0.0.1:8000/RoutePlanner/',
+                                    picture: 'dataUrl',
+                                    caption: 'This is the content of the "caption" field.',
+                                    description: 'This is the content of the "description" field, below the caption.',
+                                    message: ''
+                                });
+                            });
+                    });
+                    document.write('<img src="' + dataUrl + '"/>');
+                }
+            });
         }
-    });}
 
     </script>
 
