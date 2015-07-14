@@ -303,6 +303,10 @@
                 var endID = "locationInput" + (finIndex).toString();
                 var start = document.getElementById(startID).value;
                 var end = document.getElementById(endID).value;
+                if (start === "" || end === "") {
+                    alert("Please check your inputs.");
+                    return;
+                }
                 var request = {
                       origin: start,
                       destination: end,
