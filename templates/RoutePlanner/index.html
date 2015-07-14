@@ -17,6 +17,29 @@
                 var loggedIn = false;
                 var times = 0;
                 var inputLocations = [];
+
+                function greyOut(inputLocations, i) {
+                    console.log("Executing input change callback");
+                    var place = inputLocations[i].searchBox.getPlace();
+                    console.log(inputLocations[i].searchBox.getPlace());
+                    var locationString = document.getElementById("locationInput" + (i+1).toString()).value;
+                                      
+                    if (place == null && locationString === "") {
+                        if (i < 4) {
+                            document.getElementById("locationInput"+(i+2).toString()).disabled = true;
+                            document.getElementById("delete"+(i+2).toString()).disabled = true;
+                            document.getElementById("locationInput"+(i+2).toString()).style.backgroundColor = '#CCCCCC';
+                        }
+                        return false;
+                    } else {
+                        if (i < 4) {
+                            document.getElementById("locationInput"+(i+2).toString()).disabled = false;
+                            document.getElementById("delete"+(i+2).toString()).disabled = false;
+                            document.getElementById("locationInput"+(i+2).toString()).style.backgroundColor = '#FFFFFF';
+                        }
+                    }
+                    return true;
+                }
                 
                 function initialize() {
                     
@@ -70,34 +93,19 @@
                             var numMarkers = 0;
                             // disabling and enabling input text boxes
                             for (var i = 0; i < inputLocations.length; i++) {
-                                console.log("Executing input change callback");
                                 var place = inputLocations[i].searchBox.getPlace();
-                                console.log(inputLocations[i].searchBox.getPlace());
-                                var locationString = document.getElementById("locationInput" + (i+2).toString()).value;
-                                                  
-                                if (place == null && locationString === "") {
-                                    if (i < 4) {
-                                        document.getElementById("locationInput"+(i+2).toString()).disabled = true;
-                                        document.getElementById("delete"+(i+2).toString()).disabled = true;
-                                        document.getElementById("locationInput"+(i+2).toString()).style.backgroundColor = '#CCCCCC';
-                                    }
+                                
+                                if (!greyOut(inputLocations, i)) {
                                     continue;
-                                } else {
-                                    if (i < 4) {
-                                        document.getElementById("locationInput"+(i+2).toString()).disabled = false;
-                                        document.getElementById("delete"+(i+2).toString()).disabled = false;
-                                        document.getElementById("locationInput"+(i+2).toString()).style.backgroundColor = '#FFFFFF';
-                                    }
                                 }
-                                                  
-                            inputLocations[i].marker.setVisible(false);
+                                inputLocations[i].marker.setVisible(false);
 
-                            // Create a marker if the location can be found
-                            if (place.geometry == null){
-                                invalidLocations.push(place.name); 
-                                console.log("invalid location: " + place.name);
-                                continue;
-                            }
+                                // Create a marker if the location can be found
+                                if (place.geometry == null) {
+                                    invalidLocations.push(place.name); 
+                                    console.log("invalid location: " + place.name);
+                                    continue;
+                                }
                             
                             inputLocations[i].marker = new google.maps.Marker({
                                 map: map,
@@ -319,7 +327,7 @@
 
       document.write('<img src="' + dataUrl + '"/>');
         }
-    });
+    });}
 
     </script>
 
