@@ -20,6 +20,8 @@
             var stepDisplay;
             var directionsService = new google.maps.DirectionsService();
             var map;
+            var stepDisplay;
+            var markerArray = [];
 
             function greyOut(inputLocations, i) {
                 console.log("Executing input change callback");
@@ -55,6 +57,7 @@
                 
                 map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
                 directionsDisplay.setMap(map);
+                stepDisplay = new google.maps.InfoWindow();
                 var allBikeWays = {{ allBikeWays }};
                 for (var i = 0; i < allBikeWays.length; i++) {
                     plotBikeWay(allBikeWays[i], map);
@@ -211,6 +214,11 @@
                 var waypoints = [];
                 var startLoc;
                 var destLoc;
+                for (var i = 0; i < markerArray.length; i++) {
+                    markerArray[i].setMap(null);
+                }
+
+                markerArray = [];
                 for (var i = 1; i <= 5; i++) {
                     var address = document.getElementById("locationInput" + i.toString()).value;
                     if (address !== "") {
@@ -263,9 +271,31 @@
                       var steps = leg.steps;
                       var length = steps.length;
                       alert("There are " + length + " steps in these direction instructions.");
+                      showSteps(response);
                     }
                   });
              }
+
+             function attachInstructionText(marker, text) {
+              google.maps.event.addListener(marker, 'click', function() {
+                stepDisplay.setContent(text);
+                stepDisplay.open(map, marker);
+              });
+            }
+
+            function showSteps(directionResult) {
+              var myRoute = directionResult.routes[0].legs[0];
+
+              for (var i = 0; i < myRoute.steps.length; i++) {
+                var marker = new google.maps.Marker({
+                  position: myRoute.steps[i].start_location,
+                  map: map,
+                  icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|00ff00'
+                });
+                attachInstructionText(marker, myRoute.steps[i].instructions);
+                markerArray[i] = marker;
+              }
+            }
 
         </script>
     </head>
