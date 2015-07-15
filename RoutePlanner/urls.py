@@ -5,7 +5,7 @@ import threading
 
 urlpatterns = patterns('',
         url(r'^$', views.index, name='index'),
-        url(r'^\?route=[0-9]+$', views.index, name='loadroute'),
+        url(r'^\?route=[0-9]+$', views.index, name='index'),
         url(r'^saveroute.html$', views.save_route, name='saveroute'),
         url(r'^register.html$', views.register, name='register'),
         url(r'^login.html$', views.user_login, name='login'),

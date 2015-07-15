@@ -39,7 +39,7 @@ def index(request):
         print "Route " + route_id + " found, location1 = " + route.location1
     else:
         route = None
-        print "Route " + route_id + "not found"
+        print "Route not found"
     
     context_dict = {'allBikeWays': bikeWayCoords,
                     'updateTime': updateTime,
@@ -209,7 +209,7 @@ def save_route(request):
         route_form = RouteForm()
 
     # Render the template depending on the context.
-    return HttpResponseRedirect('/RoutePlanner/')
+    return HttpResponseRedirect('/RoutePlanner/?route=' + str(route.id))
     # TODO: actually handle this properly instead of going back to the main page
     # return render(request,
             # TODO: actually handle this properly instead of going back to the main page
