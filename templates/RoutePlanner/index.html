@@ -327,6 +327,11 @@
                   });
             }
 
+            function fillLocations(){
+
+                
+            }
+
         </script>
     </head>
     <body>
@@ -353,7 +358,7 @@
         <div id = "extraData">
         
             Locations:
-            <form id="route_form" method="post" action="route.html">
+            <form id="route_form" method="post" action="saveroute.html">
                 {% csrf_token %}
                 <table id="markerTable">
                     <!--<tr><td><input id="locationInput2" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 2" name="{{ form.location2.name }}" value="{{ form.location2.value }}"></td>-->
