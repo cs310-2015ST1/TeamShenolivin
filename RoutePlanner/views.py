@@ -27,9 +27,23 @@ def index(request):
         coordList = b[2]
          
         bikeWayCoords+=coordList # dirty fix- revisit this later
+        
+    
+    # check if we're looking up a route
+    
+    route_id = request.GET.get('route', None)
+    # print "looking up route " + route_id
+    
+    if route_id is not None:
+        route = Route.objects.get(id=route_id)
+        print "Route " + route_id + " found, location1 = " + route.location1
+    else:
+        route = None
+        print "Route not found"
     
     context_dict = {'allBikeWays': bikeWayCoords,
-                    'updateTime': updateTime}
+                    'updateTime': updateTime,
+                    'route': route}
 
     # Return a rendered response to send to the client.
     # We make use of the shortcut function to make our lives easier.
@@ -156,7 +170,7 @@ def account(request):
                   {'route_list': route_list})
 
 # plot route
-def plot_route(request):
+def save_route(request):
 
     # If it's a HTTP POST, we're interested in processing form data.
     print "processing plot route request"
@@ -195,10 +209,13 @@ def plot_route(request):
         route_form = RouteForm()
 
     # Render the template depending on the context.
-    return HttpResponseRedirect('/RoutePlanner/')
+    return HttpResponseRedirect('/RoutePlanner/?route=' + str(route.id))
     # TODO: actually handle this properly instead of going back to the main page
     # return render(request,
             # TODO: actually handle this properly instead of going back to the main page
             # 'RoutePlanner/route.html',
             # {'route_form': route_form} )
+            
+            
+
     
