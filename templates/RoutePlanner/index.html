@@ -435,61 +435,31 @@
         </div>
 
     <div id="fb-root"></div>
-    <script type="text/javascript">
-        window.fbAsyncInit = function() {
-            FB.init({
-                appId: '800885373358594',
-                status: true, 
-                cookie: true,
-                xfbml: true
-            });
-        };
-        (function() {
-            var e = document.createElement('script'); 
-            e.async = true;
-            e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
-            document.getElementById('fb-root').appendChild(e);
-        }());
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.4&appId=800885373358594";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
 
-        function saveMapToDataUrl() {
+    <div id="fb-root"></div>
+    <meta property="og:image" content="http://127.0.0.1:8000/static/images/logo.png" />
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.4&appId=800885373358594";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
 
-            var element = $("#mapDiv");
-
-            html2canvas(element, {
-                useCORS: true,
-                onrendered: function(canvas) {
-                    var dataUrl= canvas.toDataURL("image/png");
-                    console.log(dataUrl);
-                    // TODO: DO SOMETHING WITH THE DATAURL
-                    // Eg. write it to the page
-
-                    $(document).ready(function(){
-                        $('#share_button').click(function(e){
-                            e.preventDefault();
-                            FB.ui({
-                                method: 'feed',
-                                name: 'This is the content of the "name" field.',
-                                link: 'http://127.0.0.1:8000/RoutePlanner/?route={{ route }}',
-                                picture: 'dataUrl',
-                                caption: 'This is the content of the "caption" field.',
-                                description: 'This is the content of the "description" field, below the caption.',
-                                message: ''
-                            });
-                        });
-                    });
-                    document.write('<img src="' + dataUrl + '"/>');
-                }
-            });
-        }
-
-    </script>
-
-    <div
-      class="fb-like"
-      data-share="true"
-      data-width="450"
-      data-show-faces="true">
+    <div class="fb-like" data-href="http://104.236.97.57:8000/RoutePlanner/" data-layout="standard" data-action="like" data-show-faces="true" data-share="false">
     </div>
+
+    <div class="fb-share-button" data-href="http://104.236.97.57:8000/RoutePlanner/" data-layout="button_count"
+    </div>
+
+
 
     </body>
     
