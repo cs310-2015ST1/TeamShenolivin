@@ -5,7 +5,7 @@ from selenium.webdriver.common.keys import Keys
 
 driver = webdriver.Firefox()
 
-driver.get("http://104.236.97.57:8888/RoutePlanner/register.html")
+driver.get("http://104.236.97.57:8000/RoutePlanner/register.html")
 assert "Route" in driver.title
 assert "No results found." not in driver.page_source
 
