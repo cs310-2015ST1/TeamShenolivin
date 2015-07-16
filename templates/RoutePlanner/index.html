@@ -96,6 +96,8 @@
                                                   
                         var bounds = new google.maps.LatLngBounds();
                         var invalidLocations = [];
+                        // markerArray = [];
+                        removeRoutes();
                         var numMarkers = 0;
                         // disabling and enabling input text boxes
                         for (var i = 0; i < inputLocations.length; i++) {
@@ -215,14 +217,11 @@
 
             function calcRoute() {
                 // Plotting multiple destinations
+                directionsDisplay.setMap(map);
                 var waypoints = [];
                 var startLoc;
                 var destLoc;
-                for (var i = 0; i < markerArray.length; i++) {
-                    markerArray[i].setMap(null);
-                }
-
-                markerArray = [];
+                resetMarkerArray();
                 for (var i = 1; i <= 5; i++) {
                     var address = document.getElementById("locationInput" + i.toString()).value;
                     if (address !== "") {
@@ -300,7 +299,21 @@
               }
             }
 
+            function resetMarkerArray() {
+                for (var i = 0; i < markerArray.length; i++) {
+                    // markerArray[i].map = null;
+                    markerArray[i].setVisible(false);
+                }
+                markerArray = [];
+            }
+
+            function removeRoutes() {
+                directionsDisplay.setMap(null);
+                resetMarkerArray();
+            }
+
             function calcRt() {
+                directionsDisplay.setMap(map);
                 var startIndex = document.getElementById("spinner1").value;
                 var finIndex = document.getElementById("spinner2").value;
                 var startID = "locationInput" + (startIndex).toString();
@@ -325,7 +338,7 @@
                       var steps = leg.steps;
                       var length = steps.length;
                       alert("There are " + length + " steps in these direction instructions.");
-                      markerArray = [];
+                      resetMarkerArray();
                       showSteps(response);
                     }
                   });
@@ -333,8 +346,9 @@
 
             function fillLocations(){
                 // load route if applicable
+                {% if route != None %}
                 var locationSet = {{ route }};
-                if(locationSet && locationSet !== "null" && locationSet !== "undefined"){
+                if(locationSet && locationSet !== null && typeof locationSet !== "undefined"){
                     console.log("Location set valid, location1 = " + "{{route.location1}}");
 
                     var location1 = document.getElementById('locationInput1');
@@ -351,15 +365,9 @@
                     for (var i = 0; i < inputLocations.length; i++) {
                         google.maps.event.trigger(inputLocations[i].searchBox, 'place_changed');
                     }
-
-
-
                 }
-
-
+                {% endif %}
             }
-
-
         </script>
     </head>
     <body>
