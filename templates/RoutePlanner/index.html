@@ -4,46 +4,39 @@
     <head>
         <title>MegaByke Route Planner</title>
         <!--<script src="http://maps.googleapis.com/maps/api/js"></script>-->
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-        <script src="{%  static "js/bikeWayPlotter.js" %}"></script>
+        <meta property="og:image" content="http://127.0.0.1:8000/static/images/logo.png" />
         <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans" />
         <link rel="stylesheet" type="text/css" href="{% static "css/htmlStyle.css" %}" />
         <input type="hidden" id="allBikeWays" name="variable" value="{{ allBikeWays }}">
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="{%  static "js/bikeWayPlotter.js" %}"></script>
         <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js" type="text/javascript"></script>
         <script type="text/javascript">
+            var map;
+            var directionsDisplay;
+            var stepDisplay;
             var loggedIn = false;
             var times = 0;
             var inputLocations = [];
-            var directionsDisplay;
-            var stepDisplay;
-            var directionsService = new google.maps.DirectionsService();
-            var map;
-            var stepDisplay;
             var markerArray = [];
+            var directionsService = new google.maps.DirectionsService();
 
-            function greyOut(inputLocations, i) {
-                //console.log("Executing input change callback");
-                var place = inputLocations[i].searchBox.getPlace();
-                //console.log(inputLocations[i].searchBox.getPlace());
-                var locationString = document.getElementById("locationInput" + (i+1).toString()).value;
-                                  
-                if (place == null && locationString === "") {
-                    if (i < 4) {
-                        document.getElementById("locationInput"+(i+2).toString()).disabled = true;
-                        document.getElementById("delete"+(i+2).toString()).disabled = true;
-                        document.getElementById("locationInput"+(i+2).toString()).style.backgroundColor = '#CCCCCC';
-                    }
-                    return false;
-                } else {
-                    if (i < 4) {
-                        document.getElementById("locationInput"+(i+2).toString()).disabled = false;
-                        document.getElementById("delete"+(i+2).toString()).disabled = false;
-                        document.getElementById("locationInput"+(i+2).toString()).style.backgroundColor = '#FFFFFF';
-                    }
-                }
-                return true;
-            }
+            (function(d, s, id) {
+              var js, fjs = d.getElementsByTagName(s)[0];
+              if (d.getElementById(id)) return;
+              js = d.createElement(s); js.id = id;
+              js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.4&appId=800885373358594";
+              fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+
+            (function(d, s, id) {
+              var js, fjs = d.getElementsByTagName(s)[0];
+              if (d.getElementById(id)) return;
+              js = d.createElement(s); js.id = id;
+              js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.4&appId=800885373358594";
+              fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
                 
             function initialize() {
                 directionsDisplay = new google.maps.DirectionsRenderer();
@@ -151,24 +144,42 @@
                     });
 
                 };
-                // Bias the SearchBox results towards places that are within the bounds of the
-                // current map's viewport.
                 google.maps.event.addListener(map, 'bounds_changed', function() {
                     var bounds = map.getBounds();
 
                     for (var i = 0; i < inputLocations.length; i++) {
                         inputLocations[i].searchBox.setBounds(bounds);
                     }
-                });
+                });    
+            }
 
-                
-    
+            function greyOut(inputLocations, i) {
+                //console.log("Executing input change callback");
+                var place = inputLocations[i].searchBox.getPlace();
+                //console.log(inputLocations[i].searchBox.getPlace());
+                var locationString = document.getElementById("locationInput" + (i+1).toString()).value;
+                                  
+                if (place == null && locationString === "") {
+                    if (i < 4) {
+                        document.getElementById("locationInput"+(i+2).toString()).disabled = true;
+                        document.getElementById("delete"+(i+2).toString()).disabled = true;
+                        document.getElementById("locationInput"+(i+2).toString()).style.backgroundColor = '#CCCCCC';
+                    }
+                    return false;
+                } else {
+                    if (i < 4) {
+                        document.getElementById("locationInput"+(i+2).toString()).disabled = false;
+                        document.getElementById("delete"+(i+2).toString()).disabled = false;
+                        document.getElementById("locationInput"+(i+2).toString()).style.backgroundColor = '#FFFFFF';
+                    }
+                }
+                return true;
             }
 
             google.maps.event.addDomListener(window, 'load', initialize);
 
             function deleteClicked(e, number) {
-                if (document.getElementById("delete"+number.toString()).disabled) {
+                if (document.getElementById("delete" + number.toString()).disabled) {
                     e.preventDefault();
                     return;
                 }
@@ -189,12 +200,12 @@
             }
 
             function shiftLocations(index) {
-                for (var j = index; j < inputLocations.length-1; j++) {
-                    inputLocations[j].searchBox.set('place', inputLocations[j+1].searchBox.getPlace());
-                    document.getElementById("locationInput"+(j+1).toString()).value = document.getElementById("locationInput"+(j+2).toString()).value;
+                for (var j = index; j < inputLocations.length - 1; j++) {
+                    inputLocations[j].searchBox.set('place', inputLocations[j + 1].searchBox.getPlace());
+                    document.getElementById("locationInput" + (j + 1).toString()).value = document.getElementById("locationInput" + (j + 2).toString()).value;
                 }
-                inputLocations[inputLocations.length-1].searchBox.set('place', void(0));
-                document.getElementById("locationInput"+inputLocations.length.toString()).value = "";
+                inputLocations[inputLocations.length - 1].searchBox.set('place', void(0));
+                document.getElementById("locationInput" + inputLocations.length.toString()).value = "";
             }
 
             function resetClicked(e) {
@@ -210,7 +221,7 @@
                 console.log("removing all markers");
                 for (var i = 0, ip; ip = inputLocations[i]; i++) {
                     ip.marker.setMap(null);
-                    document.getElementById("locationInput"+(i+1).toString()).value = "";
+                    document.getElementById("locationInput" + (i + 1).toString()).value = "";
                     ip.searchBox.set('place',void(0));
                 }
             }
@@ -347,30 +358,23 @@
             function fillLocations(){
                 // load route if applicable
                 {% if route != None %}
-                var locationSet = {{ route }};
-                if(locationSet && locationSet !== null && typeof locationSet !== "undefined"){
-                    console.log("Location set valid, location1 = " + "{{route.location1}}");
+                console.log("Location set valid, location1 = " + "{{route.location1}}");
+                var locations = [];
+                for (var i = 1; i < 6; i++) {
+                    locations.push(document.getElementById("locationInput" + i.toString()));
+                }
+                locations[0].value = "{{route.location1}}";
+                locations[1].value = "{{route.location2}}";
+                locations[2].value = "{{route.location3}}";
+                locations[3].value = "{{route.location4}}";
+                locations[4].value = "{{route.location5}}";
 
-                    var location1 = document.getElementById('locationInput1');
-                    var location2 = document.getElementById('locationInput2');
-                    var location3 = document.getElementById('locationInput3');
-                    var location4 = document.getElementById('locationInput4');
-                    var location5 = document.getElementById('locationInput5');
-                    location1.value = "{{route.location1}}";
-                    location2.value = "{{route.location2}}";
-                    location3.value = "{{route.location3}}";
-                    location4.value = "{{route.location4}}";
-                    location5.value = "{{route.location5}}";
-
-                    for (var i = 0; i < inputLocations.length; i++) {
-                        google.maps.event.trigger(inputLocations[i].searchBox, 'place_changed');
-                    }
+                for (var i = 0; i < inputLocations.length; i++) {
+                    google.maps.event.trigger(inputLocations[i].searchBox, 'place_changed');
                 }
                 {% endif %}
             }
         </script>
-
-     <meta property="og:image" content="http://127.0.0.1:8000/static/images/logo.png" />
     </head>
     <body>
     <nav>
@@ -391,89 +395,62 @@
             </ul>
         </div>
     </nav>
-        <div id='title'>
-            <h1> Route Planner </h1>
-        </div>
-        <div id="infoInput">
-        </div>
-        <div id = "extraData">
-        
-            Locations:
-            <form id="route_form" method="post" action="saveroute.html">
-                {% csrf_token %}
-                <table id="markerTable">
-                    <!--<tr><td><input id="locationInput2" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 2" name="{{ form.location2.name }}" value="{{ form.location2.value }}"></td>-->
-                    {{ form.location1.errors }}
-                    <tr><td><input id="locationInput1" class="controls" type="text" style="background-color:#FFFFFF" placeholder="Location 1" name="location1"></td>
-                        <td><img src="{{ STATIC_URL }}images/redX.png" id="delete1" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 1);"></td></tr>
-                    {{ form.location2.errors }}
-                    <tr><td><input id="locationInput2" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 2" name="location2"></td>
-                        <td><img src="{{ STATIC_URL }}images/redX.png" id="delete2" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 2);"></td></tr>
-                    {{ form.location3.errors }}
-                    <tr><td><input id="locationInput3" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 3" name="location3"></td>
-                        <td><img src="{{ STATIC_URL }}images/redX.png" id="delete3" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 3);"></td></tr>
-                    {{ form.location4.errors }}
-                    <tr><td><input id="locationInput4" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 4" name="location4"></td>
-                        <td><img src="{{ STATIC_URL }}images/redX.png" id="delete4" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 4);"></td></tr>
-                    {{ form.location5.errors }}
-                    <tr><td><input id="locationInput5" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 5" name="location5"></td>
-                        <td><img src="{{ STATIC_URL }}images/redX.png" id="delete5" alt="Delete marker" height="30" width="30" disabled="true" onclick="deleteClicked(event, 5);"></td></tr>
-                </table>
-                <button class="submitBtn" type="submit">Save Route</button>
-            </form>
-            <button class="submitBtn" type="reset" onclick="resetClicked(event)">Reset Markers</button>
-            <br>
-            <br> Please enter the start location.
-            <br><input type="number" MIN="1" MAX="5" STEP="1" VALUE="1" SIZE="6" id="spinner1" class="controls">
-            <br> Please enter the end location.
-            <br><input type="number" MIN="1" MAX="5" STEP="1" VALUE="5" SIZE="6" id="spinner2" class="controls">
-            <br><button class="submitBtn" type="button" onclick="calcRt();">Plot Routes</button>
-            <br><button class="submitBtn" type="button" onclick="calcRoute();">Plot All Routes</button>
-        
-            <br>
-            {% if user.is_authenticated %}
-            Logged in as {{ user.username }}<br/>
-            {% endif %}
-            <br/>
-            Last updated: {{ updateTime|safe }}
-            <br/>
-            {% if user.is_superuser %}
-            <form action="#" method="get">
-                <input class="submitBtn" type="submit" value="Update Database" name="update"> </input>
-            </form>
-            {% endif %}
-
-        </div>
-        <div id="googleMap">
-        </div>
-
-    <div id="fb-root"></div>
-    <script>(function(d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) return;
-      js = d.createElement(s); js.id = id;
-      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.4&appId=800885373358594";
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));</script>
-
-    <div id="fb-root"></div>
-
-    <script>(function(d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) return;
-      js = d.createElement(s); js.id = id;
-      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.4&appId=800885373358594";
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));</script>
-
-    <div class="fb-like" data-href="http://104.236.97.57:8000/RoutePlanner/" data-layout="standard" data-action="like" data-show-faces="true" data-share="false">
+    <div id='title'>
+        <h1> Route Planner </h1>
     </div>
-
-    <div class="fb-share-button" data-href="http://104.236.97.57:8000/RoutePlanner/" data-layout="button_count"
+    <div id="infoInput">
     </div>
-
-
-
-    </body>
+    <div id = "extraData">
+        Locations:
+        <form id="route_form" method="post" action="saveroute.html">
+            {% csrf_token %}
+            <table id="markerTable">
+                <!--<tr><td><input id="locationInput2" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 2" name="{{ form.location2.name }}" value="{{ form.location2.value }}"></td>-->
+                {{ form.location1.errors }}
+                <tr><td><input id="locationInput1" class="controls" type="text" style="background-color:#FFFFFF" placeholder="Location 1" name="location1"></td>
+                    <td><img src="{{ STATIC_URL }}images/redX.png" id="delete1" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 1);"></td></tr>
+                {{ form.location2.errors }}
+                <tr><td><input id="locationInput2" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 2" name="location2"></td>
+                    <td><img src="{{ STATIC_URL }}images/redX.png" id="delete2" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 2);"></td></tr>
+                {{ form.location3.errors }}
+                <tr><td><input id="locationInput3" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 3" name="location3"></td>
+                    <td><img src="{{ STATIC_URL }}images/redX.png" id="delete3" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 3);"></td></tr>
+                {{ form.location4.errors }}
+                <tr><td><input id="locationInput4" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 4" name="location4"></td>
+                    <td><img src="{{ STATIC_URL }}images/redX.png" id="delete4" alt="Delete marker" height="30" width="30" onclick="deleteClicked(event, 4);"></td></tr>
+                {{ form.location5.errors }}
+                <tr><td><input id="locationInput5" class="controls" type="text" disabled="true" style="background-color:#CCCCCC" placeholder="Location 5" name="location5"></td>
+                    <td><img src="{{ STATIC_URL }}images/redX.png" id="delete5" alt="Delete marker" height="30" width="30" disabled="true" onclick="deleteClicked(event, 5);"></td></tr>
+            </table>
+            <button class="submitBtn" type="submit">Save Route</button>
+        </form>
+        <button class="submitBtn" type="reset" onclick="resetClicked(event)">Reset Markers</button>
+        <br>
+        <br> Please enter the start location.
+        <br><input type="number" MIN="1" MAX="5" STEP="1" VALUE="1" SIZE="6" id="spinner1" class="controls">
+        <br> Please enter the end location.
+        <br><input type="number" MIN="1" MAX="5" STEP="1" VALUE="5" SIZE="6" id="spinner2" class="controls">
+        <br><button class="submitBtn" type="button" onclick="calcRt();">Plot Routes</button>
+        <br><button class="submitBtn" type="button" onclick="calcRoute();">Plot All Routes</button>
     
+        <br>
+        {% if user.is_authenticated %}
+        Logged in as {{ user.username }}<br/>
+        {% endif %}
+        <br/>
+        Last updated: {{ updateTime|safe }}
+        <br/>
+        {% if user.is_superuser %}
+        <form action="#" method="get">
+            <input class="submitBtn" type="submit" value="Update Database" name="update"> </input>
+        </form>
+        {% endif %}
+
+    </div>
+    <div id="googleMap">
+    </div>
+    <div id="fb-root"> </div>
+    <div class="fb-like" data-href="http://104.236.97.57:8000/RoutePlanner/" data-layout="standard" data-action="like" data-show-faces="true" data-share="false"> </div>
+    <div class="fb-share-button" data-href="http://104.236.97.57:8000/RoutePlanner/" data-layout="button_count"> </div>
+    </body> 
 </html>
