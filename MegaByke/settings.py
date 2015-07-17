@@ -27,7 +27,8 @@ DEBUG = True
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['104.236.97.57:8000/RoutePlanner',
+                 '127.0.0.1:8000/RoutePlanner',]
 
 
 # Application definition
