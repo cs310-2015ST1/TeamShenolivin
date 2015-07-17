@@ -28,7 +28,7 @@
             var loggedIn = false;
             var times = 0;
             var inputLocations = [];
-            var markerArray = [];
+            var markerArray = [[], [], [], []];
             var directionsService = new google.maps.DirectionsService();
             var currentBox = 0;
 
@@ -99,7 +99,6 @@
                                                   
                         var bounds = new google.maps.LatLngBounds();
                         var invalidLocations = [];
-                        // markerArray = [];
                         removeRoutes();
                         var numMarkers = 0;
                         // disabling and enabling input text boxes
@@ -286,14 +285,16 @@
                   };
                   directionsService.route(request, function(response, status) {
                     if (status == google.maps.DirectionsStatus.OK) {
-                      directionsDisplay.setDirections(response);
-                      var plannedRoutes = response.routes;
-                      var singleRoute = plannedRoutes[0];
-                      var leg = singleRoute.legs[0];
-                      var steps = leg.steps;
-                      var length = steps.length;
-                      alert("There are " + length + " steps in these direction instructions.");
-                      showSteps(response);
+                        directionsDisplay.setDirections(response);
+                        var singleRoute = response.routes[0];
+                        var length = 0;
+                        for (var i = 0; i < singleRoute.legs.length; i++) {
+                            var leg = singleRoute.legs[i];
+                            var steps = leg.steps;
+                            length += steps.length;
+                        }
+                        alert("There are " + length + " steps in these direction instructions.");
+                        showSteps(response);
                     }
                   });
              }
@@ -307,7 +308,6 @@
 
             function showSteps(directionResult) {
               for (var k = 0; k < directionResult.routes[0].legs.length; k++) {
-                console.log(directionResult.routes[0].legs.length);
                   var myRoute = directionResult.routes[0].legs[k];
 
                   for (var i = 0; i < myRoute.steps.length; i++) {
@@ -317,17 +317,17 @@
                       icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|00ff00'
                     });
                     attachInstructionText(marker, myRoute.steps[i].instructions);
-                    markerArray[i] = marker;
+                    markerArray[k][i] = marker;
                   }
               }
             }
 
             function resetMarkerArray() {
-                for (var i = 0; i < markerArray.length; i++) {
-                    // markerArray[i].map = null;
-                    markerArray[i].setVisible(false);
+                for (var k = 0; k < markerArray.length; k++) {
+                    for (var i = 0; i < markerArray[k].length; i++)
+                        markerArray[k][i].setVisible(false);
                 }
-                markerArray = [];
+                markerArray = [[], [], [], []];
             }
 
             function removeRoutes() {
@@ -337,6 +337,7 @@
 
             function calcRt() {
                 directionsDisplay.setMap(map);
+                resetMarkerArray();
                 var startIndex = document.getElementById("spinner1").value;
                 var finIndex = document.getElementById("spinner2").value;
                 var startID = "locationInput" + (startIndex).toString();
@@ -361,7 +362,6 @@
                       var steps = leg.steps;
                       var length = steps.length;
                       alert("There are " + length + " steps in these direction instructions.");
-                      resetMarkerArray();
                       showSteps(response);
                     }
                   });
@@ -391,7 +391,6 @@
                     };
 
                     placesService.textSearch(request, processPlaceSearch);
-
                     
                 }
                 google.maps.event.trigger(inputLocations[0].searchBox, 'place_changed');
@@ -405,7 +404,6 @@
                     inputLocations[currentBox].searchBox.set('place', place);
                     console.log("currentBox in process = " + currentBox);
                     currentBox++;
-
                 }
             }
         </script>
