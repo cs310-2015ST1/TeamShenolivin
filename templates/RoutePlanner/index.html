@@ -207,6 +207,7 @@
                 inputLocations[number-1].marker.setMap(null);
                 document.getElementById("locationInput"+number.toString()).value = "";
                 shiftLocations(number-1);
+                removeRoutes();
             }
 
             function shiftLocations(index) {
@@ -234,6 +235,7 @@
                     document.getElementById("locationInput" + (i + 1).toString()).value = "";
                     ip.searchBox.set('place',void(0));
                 }
+                removeRoutes();
             }
 
             function calcRoute() {
