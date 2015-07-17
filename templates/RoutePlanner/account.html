@@ -48,14 +48,14 @@
 	        </div>
 	    </nav>
 	    <div id='title'>
-	        <h1>Your Account</h1>
+	        <h1>My Account</h1>
 	        {% if user.is_authenticated %}
-            Hello, {{ user.username }}<br/>
+            Hello, {{ user.username }}!<br/>
             {% endif %}
 	        Your recent routes:
             <ul>
               {% for route in route_list %}
-                <li> Route ID: {{ route.id }}
+                <li> <a href="/RoutePlanner/?route={{ route.id }}"><font color = "blue">Route ID: {{ route.id }}</font></a>
                     <ol>
                         <li>{{ route.location1 }}</li>
                         <li>{{ route.location2 }}</li>
