@@ -1,0 +1,58 @@
+
+#test plotting
+driver.get("http://104.236.97.57:8000/RoutePlanner/")
+assert "Route" in driver.title
+assert "No results found." not in driver.page_source
+
+location1 = driver.find_element_by_id("locationInput1")
+location2 = driver.find_element_by_id("locationInput2")
+location3 = driver.find_element_by_id("locationInput3")
+resetMarkers = driver.find_element_by_partial_link_text("Reset")
+spinner1 = driver.find_element_by_id("spinner1")
+spinner2 = driver.find_element_by_id("spinner2")
+plotRoutes = driver.find_element_by_partial_link_text("Plot Routes")
+plotAllRoutes = driver.find_element_by_partial_link_text("Plot All Routes")
+
+#plot and save one point
+location1.send_keys("vandusen")
+location1.click()
+location1.send_keys(Keys.ARROW_DOWN)
+location1.send_keys(Keys.ENTER)
+
+#now add another point and save
+location2.send_keys("oakridge")
+location2.click()
+location2.send_keys(Keys.ARROW_DOWN)
+location2.send_keys(Keys.ENTER)
+
+#reset those markers now
+resetMarkers.click()
+alert = driver.switch_to.alert.accept()
+
+#now plot route between the two points
+spinner1.send_keys("1")
+spinner2.send_keys("2")
+plotRoutes.click()
+alert = driver.switch_to.alert.accept()
+
+#now with number higher than number of inputs
+spinner2.send_keys("5")
+plotRoutes.click()
+alert = driver.switch_to.alert.accept()
+
+#now try with plot all routes
+plotAllRoutes.click()
+alert = driver.switch_to.alert.accept()
+
+#try a segment of the route
+location3.send_keys("vgh")
+location3.click()
+location3.send_keys(Keys.ARROW_DOWN)
+location3.send_keys(Keys.ENTER)
+
+spinner1.send_keys("2")
+spinner2.send_keys("3")
+plotRoutes.click()
+driver.switch_to.alert.accept()
+
+driver.close()
