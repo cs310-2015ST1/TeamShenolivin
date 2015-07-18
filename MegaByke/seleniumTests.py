@@ -108,5 +108,10 @@ location1.click()
 location1.send_keys(Keys.ARROW_DOWN)
 location1.send_keys(Keys.ENTER)
 
+#because of how caching is implemented, as well as
+#facebook, those are better tested manually
+#for routes, would test with locations entered as well
+#as invalid routes (i.e. spinner = 4 when there are only
+#two locations, and try Plot Routes as well as Plot All Routes
 
 driver.close()
